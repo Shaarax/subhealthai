@@ -24,6 +24,12 @@ This repository contains the **starter codebase**, database schema, and demo UI 
 
 ---
 
+## 🖼 Architecture
+
+![SubHealthAI Architecture](./docs/subhealthai_architecture.png)
+
+---
+
 ## 🛠 Tech Stack
 - **Frontend**: Next.js (App Router), TailwindCSS  
 - **Backend / Auth**: Supabase (Postgres, Row-Level Security, Auth)  
