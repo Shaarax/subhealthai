@@ -3,6 +3,29 @@
 AI-powered preventive health platform to detect **subclinical dysfunctions** and early signs of chronic illness **before** diagnosis.  
 This starter repo gives you a clean, minimal foundation to begin shipping an MVP and collecting evidence.
 
+# SubHealthAI: Early Detection Before Diagnosis
+
+SubHealthAI is an AI-powered health monitoring platform designed to detect
+**subclinical dysfunctions and early signs of chronic illness before they
+become diagnosable disease**.
+
+### Why this matters
+- **Chronic diseases drive ~90% of U.S. healthcare costs ($4.1 trillion annually).**
+- Current medical systems miss **subclinical dysfunction** (silent inflammation,
+early metabolic decline, autoimmune signals).
+- By shifting care from **reactive to preventive**, SubHealthAI can help reduce
+costs, improve quality of life, and save lives.
+
+### What we are building (MVP)
+- **Data ingestion** from wearables + lifestyle inputs  
+- **Rule-based signals ("flags")** → sleep debt, low HRV, elevated resting HR  
+- **AI-generated weekly note** → plain-language explanation of risk trends  
+- **Clinician-ready export** → PDF/email with data table + citations  
+
+This repo contains the **MVP skeleton**, database schema, and demo UI for
+future iterations.
+
+
 ## What it does (MVP scope)
 - Ingests **wearable & lifestyle** events into `events_raw`
 - Computes derived **metrics** (sleep, HRV, steps, RHR)
