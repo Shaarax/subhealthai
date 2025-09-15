@@ -1,8 +1,9 @@
 # SubHealthAI: Early Detection Before Diagnosis
 
-SubHealthAI is an **AI-powered health monitoring platform** designed to detect  
-subclinical dysfunctions and early signs of chronic illness **before they become diagnosable disease**.  
-By combining wearable data, lifestyle inputs, and advanced machine learning, SubHealthAI aims to shift healthcare from **reactive treatment** to **preventive intervention**.
+SubHealthAI is an **AI-powered health monitoring platform** currently in development,  
+designed to identify **early warning signals and subclinical patterns** of chronic illness.  
+Its goal is to **support physicians and patients** by highlighting risk trends that  
+traditional healthcare systems often overlook, enabling more timely preventive care.
 
 ---
 
