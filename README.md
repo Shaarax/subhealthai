@@ -1,92 +1,85 @@
 # SubHealthAI: Early Detection Before Diagnosis
 
-SubHealthAI is an AI-powered health monitoring platform designed to detect
-**subclinical dysfunctions and early signs of chronic illness before they
-become diagnosable disease**.
+SubHealthAI is an **AI-powered health monitoring platform** designed to detect  
+subclinical dysfunctions and early signs of chronic illness **before they become diagnosable disease**.  
+By combining wearable data, lifestyle inputs, and advanced machine learning, SubHealthAI aims to shift healthcare from **reactive treatment** to **preventive intervention**.
 
-### Why this matters
-- **Chronic diseases drive ~90% of U.S. healthcare costs ($4.1 trillion annually).**
-- Current medical systems miss **subclinical dysfunction** (silent inflammation,
-early metabolic decline, autoimmune signals).
-- By shifting care from **reactive to preventive**, SubHealthAI can help reduce
-costs, improve quality of life, and save lives.
+---
 
-### What we are building (MVP)
-- **Data ingestion** from wearables + lifestyle inputs  
-- **Rule-based signals ("flags")** → sleep debt, low HRV, elevated resting HR  
-- **AI-generated weekly note** → plain-language explanation of risk trends  
-- **Clinician-ready export** → PDF/email with data table + citations  
+## 🌍 Why This Matters
+- **Chronic disease drives ~90% of U.S. healthcare costs** ($4.1 trillion annually).
+- Millions of Americans suffer from **silent inflammation, metabolic dysfunction, and autoimmune issues** that remain invisible to traditional diagnostics.
+- **Early detection saves lives and reduces costs.** By identifying hidden risk patterns before symptoms escalate, SubHealthAI enables timely action for individuals and physicians.
 
-This repo contains the **MVP skeleton**, database schema, and demo UI for
-future iterations.
+---
 
+## 🚀 What We’re Building (MVP)
+- **Data ingestion** from wearables, lifestyle tracking, and behavioral inputs  
+- **Signal flags**: rule-based indicators (e.g., sleep debt, HRV decline, elevated resting HR)  
+- **AI-generated weekly note**: plain-language report summarizing risks and trends  
+- **Clinician export**: one-tap PDF/email report with tables, charts, and references  
+- **Audit logging**: system-wide transparency for trust and reliability  
 
-## What it does (MVP scope)
-- Ingests **wearable & lifestyle** events into `events_raw`
-- Computes derived **metrics** (sleep, HRV, steps, RHR)
-- Raises **flags** (e.g., sleep debt, low HRV) with rationale
-- Generates a **Weekly Note** (LLM wrapper) from structured flags
-- Exports a **PDF** report (placeholder route) with sources & data table
+This repository contains the **starter codebase**, database schema, and demo UI for the MVP.
 
-## Stack
-- **Next.js (App Router)** + TypeScript + TailwindCSS
-- **Supabase (Postgres + Auth + Storage)** via `@supabase/supabase-js`
-- Simple cron/script for **deltas → metrics → flags → audit_log**
+---
 
-## Architecture (MVP)
-```mermaid
-flowchart TD
-  A[Wearables/Lifestyle Apps] -->|events| B[events_raw]
-  B --> C[metrics (daily aggregates)]
-  C --> D[flags (rule-based signals)]
-  D --> E[LLM wrapper → weekly_notes]
-  E --> F[PDF Export / Clinician Email]
-  subgraph Supabase (Postgres)
-    B
-    C
-    D
-    E
-    G[audit_log]
-    H[users]
-  end
-  I[Admin Page] --> C
-  I --> D
-```
+## 🛠 Tech Stack
+- **Frontend**: Next.js (App Router), TailwindCSS  
+- **Backend / Auth**: Supabase (Postgres, Row-Level Security, Auth)  
+- **Data Processing**: Cron-style scripts for wearable delta ingestion + flag computation  
+- **AI Integration**: LLM wrappers for generating weekly notes (OpenAI / Hugging Face)  
+- **Export**: PDF generation + email delivery (transactional API integration planned)  
 
-## Quick start
-1. **Create Supabase project** → copy the SQL in `supabase/schema.sql` into the SQL editor.
-2. Copy `.env.example` → `.env.local` and set:
-   - `NEXT_PUBLIC_SUPABASE_URL`
-   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-   - (optional) `OPENAI_API_KEY` for weekly note generation
-3. Install & run:
-   ```bash
-   npm install
-   npm run dev
-   ```
-4. Seed demo data (optional):
-   ```bash
-   npm run seed
-   ```
+---
 
-## Repo layout
-```
-/app                 # Next.js app router
-  /api/weekly-note   # API route placeholder for LLM wrapper
-  /components        # UI components
-  /styles            # Tailwind styles
-/docs                # Whitepaper outline & docs
-/lib                 # Supabase client & helpers
-/scripts             # cron-style scripts (compute flags, seed data)
-/supabase            # SQL schema & RLS notes
-```
+## 🗂 Database Schema
+Key tables in `/supabase/schema.sql`:
+- `users` → profiles and auth linkage  
+- `events_raw` → ingested wearable + lifestyle data  
+- `metrics` → computed metrics (sleep, HR, HRV, steps, etc.)  
+- `flags` → rule-based signals indicating early risk  
+- `weekly_notes` → AI-generated summaries for end users  
+- `audit_log` → system-wide transparency and accountability  
 
-## Roadmap
-- Add OAuth login + per-user RLS
-- Add wearable connectors (Apple/Google/Fitbit exports → ETL)
-- Improve flags with time-series models
-- PDF export via server route (Puppeteer/Playwright)
-- Clinician view + CSV export
+---
 
-## Legal & Safety
-This repository is a **technical demo**. It is **not medical advice**. Any health guidance must be validated by licensed professionals.
+## 📈 Roadmap
+- [x] Project scaffold: Next.js + Supabase + TailwindCSS  
+- [x] Core schema design (users, events, flags, metrics, notes, audit log)  
+- [ ] Basic dashboard UI with signal flags + weekly note preview  
+- [ ] PDF export and clinician-ready report  
+- [ ] Integrations with wearable APIs (Fitbit, Oura, Garmin, Apple Health)  
+- [ ] Advanced AI models: time-series forecasting, embeddings, and multi-modal risk scoring  
+- [ ] Pilot study with real user data + clinical advisors  
+
+---
+
+## 📄 Whitepaper
+See `/docs/whitepaper-outline.md` for the initial research framing:  
+- U.S. healthcare burden of chronic illness  
+- Gaps in early detection and subclinical dysfunction  
+- SubHealthAI’s proposed solution architecture  
+- Future research and clinical validation pathway  
+
+---
+
+## 🤝 How to Contribute
+We welcome collaborators in:  
+- Preventive medicine, public health, and clinical research  
+- AI/ML modeling (time-series, embeddings, anomaly detection)  
+- Full-stack engineering (Next.js, Supabase, data pipelines)  
+
+---
+
+## 📬 Contact
+Founder: **Mohd Shaarif Khan**  
+Email: [your email here]  
+GitHub: [your GitHub username]  
+LinkedIn: [your LinkedIn link]  
+
+---
+
+> ⚠️ **Disclaimer**: SubHealthAI is a research and development project.  
+> It is **not a medical device** and does not provide medical advice.  
+> Always consult qualified healthcare professionals for medical decisions.
