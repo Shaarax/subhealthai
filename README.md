@@ -1,8 +1,3 @@
-# SubHealthAI (Starter)
-
-AI-powered preventive health platform to detect **subclinical dysfunctions** and early signs of chronic illness **before** diagnosis.  
-This starter repo gives you a clean, minimal foundation to begin shipping an MVP and collecting evidence.
-
 # SubHealthAI: Early Detection Before Diagnosis
 
 SubHealthAI is an AI-powered health monitoring platform designed to detect
