@@ -1,16 +1,18 @@
 # SubHealthAI: Early Detection Before Diagnosis
 
-SubHealthAI is an **AI-powered health monitoring platform** currently in development,  
-designed to identify **early warning signals and subclinical patterns** of chronic illness.  
-Its goal is to **support physicians and patients** by highlighting risk trends that  
-traditional healthcare systems often overlook, enabling more timely preventive care.
+SubHealthAI is an **AI-powered health monitoring project currently in development**.  
+Its purpose is to analyze wearable and lifestyle data to identify **early warning signals**  
+and **subclinical patterns** that often go unnoticed in traditional healthcare settings.  
+The goal is not to provide a medical diagnosis, but to **support physicians and patients**  
+by surfacing trends that may warrant preventive attention.
 
 ---
 
-## 🌍 Why This Matters
-- **Chronic disease drives ~90% of U.S. healthcare costs** ($4.1 trillion annually).
-- Millions of Americans suffer from **silent inflammation, metabolic dysfunction, and autoimmune issues** that remain invisible to traditional diagnostics.
-- **Early detection saves lives and reduces costs.** By identifying hidden risk patterns before symptoms escalate, SubHealthAI enables timely action for individuals and physicians.
+### Why this matters
+- Chronic diseases account for almost **90% of U.S. healthcare spending** ($4.1 trillion annually).  
+- Many conditions begin with **silent inflammation or early dysfunctions** that existing diagnostic tools miss.  
+- By offering physicians and individuals a clearer view of these early risk patterns, SubHealthAI has  
+the potential to lower long-term costs and improve health outcomes.
 
 ---
 
