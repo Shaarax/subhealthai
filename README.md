@@ -33,6 +33,25 @@ This repository contains the **starter codebase**, database schema, and demo UI 
 
 ![SubHealthAI Architecture](./docs/subhealthai_architecture.png)
 
+[Wearables APIs]   [Lifestyle Inputs]
+        │                   │
+        ▼                   ▼
+     Data Ingestion (Cron jobs, ETL)
+                │
+                ▼
+        Supabase Database
+   (users, events, metrics, flags)
+                │
+                ▼
+   Flag Computation Engine (rule-based)
+                │
+                ▼
+   AI Layer (LLM wrappers for weekly note)
+                │
+                ▼
+    Reports → Dashboard / PDF / Email
+
+
 ---
 
 ## 🛠 Tech Stack
