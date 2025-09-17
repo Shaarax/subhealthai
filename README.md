@@ -1,11 +1,8 @@
 # SubHealthAI: Early Detection Before Diagnosis
 
 SubHealthAI is an **AI-powered preventive health project currently in development**.  
-Its purpose is to analyze wearable and lifestyle data to identify **early warning signals**  
-and **subclinical patterns** that often go unnoticed in traditional healthcare.  
-The goal is not to provide a medical diagnosis, but to **support physicians today** 
-with a long-term vision of **empowering individuals under physician oversight** 
-by surfacing trends that may warrant preventive attention.
+Its purpose is to analyze wearable and lifestyle data to identify **early warning signals** and **subclinical patterns** that often go unnoticed in traditional healthcare.  
+The goal is not to provide a medical diagnosis, but to **support physicians today** with a long-term vision of **empowering individuals under physician oversight** by surfacing trends that may warrant preventive attention.
 
 ---
 
