@@ -1,9 +1,10 @@
 # SubHealthAI: Early Detection Before Diagnosis
 
-SubHealthAI is an **AI-powered health monitoring project currently in development**.  
+SubHealthAI is an **AI-powered preventive health project currently in development**.  
 Its purpose is to analyze wearable and lifestyle data to identify **early warning signals**  
-and **subclinical patterns** that often go unnoticed in traditional healthcare settings.  
-The goal is not to provide a medical diagnosis, but to **support physicians and patients**  
+and **subclinical patterns** that often go unnoticed in traditional healthcare.  
+The goal is not to provide a medical diagnosis, but to **support physicians today** 
+with a long-term vision of **empowering individuals under physician oversight** 
 by surfacing trends that may warrant preventive attention.
 
 ---
@@ -11,8 +12,9 @@ by surfacing trends that may warrant preventive attention.
 ### Why this matters
 - Chronic diseases account for almost **90% of U.S. healthcare spending** ($4.1 trillion annually).  
 - Many conditions begin with **silent inflammation or early dysfunctions** that existing diagnostic tools miss.  
-- By offering physicians and individuals a clearer view of these early risk patterns, SubHealthAI has  
-the potential to lower long-term costs and improve health outcomes.
+- By offering physicians and eventually individuals a clearer view of these early risk patterns,  
+SubHealthAI has the potential to lower long-term costs and improve health outcomes.  
+- All development follows a **privacy-first design** and will align with **HIPAA and FDA digital health guidelines** during clinical testing.
 
 ---
 
@@ -60,7 +62,7 @@ Key tables in `/supabase/schema.sql`:
 - [ ] PDF export and clinician-ready report  
 - [ ] Integrations with wearable APIs (Fitbit, Oura, Garmin, Apple Health)  
 - [ ] Advanced AI models: time-series forecasting, embeddings, and multi-modal risk scoring  
-- [ ] Pilot study with real user data + clinical advisors  
+- [ ] Exploratory pilot testing with clinical advisors (pending regulatory alignment)  
 
 ---
 
@@ -69,7 +71,7 @@ See `/docs/whitepaper-outline.md` for the initial research framing:
 - U.S. healthcare burden of chronic illness  
 - Gaps in early detection and subclinical dysfunction  
 - SubHealthAI’s proposed solution architecture  
-- Future research and clinical validation pathway  
+- Future research, clinical validation pathway, and regulatory considerations (HIPAA, FDA)  
 
 ---
 
@@ -83,12 +85,14 @@ We welcome collaborators in:
 
 ## 📬 Contact
 Founder: **Mohd Shaarif Khan**  
-Email: [your email here]  
-GitHub: [your GitHub username]  
-LinkedIn: [your LinkedIn link]  
+Email: **shaarifkhan12@gmail.com** 
+GitHub: **https://github.com/Shaarax**  
+LinkedIn: **www.linkedin.com/in/mohdshaarif-khan**  
 
 ---
 
 > ⚠️ **Disclaimer**: SubHealthAI is a research and development project.  
 > It is **not a medical device** and does not provide medical advice.  
+> All future development will follow **HIPAA-compliant, privacy-first design**  
+> and align with FDA digital health guidelines.  
 > Always consult qualified healthcare professionals for medical decisions.
