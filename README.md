@@ -33,6 +33,7 @@ This repository contains the **starter codebase**, database schema, and demo UI 
 
 ![SubHealthAI Architecture](./docs/subhealthai_architecture.png)
 
+```text
 [Wearables APIs]   [Lifestyle Inputs]
         │                   │
         ▼                   ▼
@@ -50,8 +51,7 @@ This repository contains the **starter codebase**, database schema, and demo UI 
                 │
                 ▼
     Reports → Dashboard / PDF / Email
-
-
+```
 ---
 
 ## 🛠 Tech Stack
