@@ -104,7 +104,7 @@ We welcome collaborators in:
 
 ## 📬 Contact
 Founder: **Mohd Shaarif Khan**  
-Email: **shaarifkhan12@gmail.com** 
+Email: **shaarifkhan12@gmail.com**
 GitHub: **https://github.com/Shaarax**  
 LinkedIn: **www.linkedin.com/in/mohdshaarif-khan**  
 
