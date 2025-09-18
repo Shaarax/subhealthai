@@ -113,13 +113,14 @@ Key tables in `/supabase/schema.sql`:
 
 ---
 
-## 📄 Whitepaper
-See `/docs/whitepaper-outline.md` for the initial research framing:  
+## 📄 Whitepaper  
+See `/docs/whitepaper.md` for the full research framing:  
 - U.S. healthcare burden of chronic illness  
 - Gaps in early detection and subclinical dysfunction  
 - SubHealthAI’s proposed solution architecture  
-- Future research, clinical validation pathway, and regulatory considerations (HIPAA, FDA)  
-
+- Methods, safeguards, and compliance framing  
+- Roadmap for clinical validation and future deployment
+  
 ---
 
 ## 🤝 How to Contribute
