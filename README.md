@@ -20,19 +20,19 @@ Most wearable apps today provide raw metrics (HR, HRV, steps, sleep) in isolatio
 They rarely integrate these into meaningful health patterns or long-term risk insights.
 
 SubHealthAI is different. It provides a **structured "early warning" layer** on top of wearable and lifestyle data:
-**1. Cross-signal integration**
+1. **Cross-signal integration**
  - Combines multiple inputs (HRV decline, rising resting HR, accumulated sleep debt, activity instability).
  - Surfaces dysfunction patterns that single-device apps cannot reveal.
-**2. Subclinical risk flags (not diagnosis)**
+2. **Subclinical risk flags (not diagnosis)**
  - Generates explainable “early warning flags” such as possible inflammation risk or metabolic strain.
  - Each flag includes supporting rationale and confidence scoring.
-**3. Longitudinal tracking**
+3. **Longitudinal tracking**
  - Analyzes rolling 7/30/90-day trends instead of one-night snapshots.
  - Captures slow-moving dysfunctions and reduces false positives.
-**4. Multimodal roadmap**
+4. **Multimodal roadmap**
  - Now (MVP): wearable + lifestyle inputs.
  - Future: optional patient-provided lab results (e.g., CRP, HbA1c, vitamin D) to increase precision.
-**5. Clinician-ready outputs**
+5. **Clinician-ready outputs**
  - Weekly plain-language notes for users.
  - One-tap PDF/Email reports with tables, charts, and citations designed for physicians.
 
