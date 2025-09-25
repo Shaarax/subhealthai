@@ -127,6 +127,7 @@ Key tables in `/supabase/schema.sql`:
 ---
 
 ## 📈 Roadmap
+**MVP (In Progress)**  
 - [x] Project scaffold: Next.js + Supabase + TailwindCSS  
 - [x] Core schema design (users, events_raw, metrics, flags, weekly_notes, audit_log)  
 - [x] Rule-based flagging engine (Python/TS) with rationale strings  
