@@ -7,6 +7,9 @@
 4. **Weekly Notes (LLM) → `weekly_notes`** (explainable summaries with guardrails)
 5. **Audit Trail → `audit_log`** (transparency for every automated action)
 
+**System Flow (at a glance)** 
+events_raw → metrics → flags → weekly_notes → exports (PDF/email) → audit_log
+
 ## Jobs / Scripts
 - `scripts/load_mock_metrics.py` – seed/demo data
 - `scripts/flagging_engine.py` – Python rule-based flags
@@ -14,4 +17,15 @@
 - (Planned) Supabase Edge Function (cron) – nightly rollup `events_raw → metrics`
 
 ## Core Tables
-`users`, `events_raw`, `metrics`, `flags`, `weekly_notes`, `audit_log`
+- `users`
+- `events_raw`
+- `metrics`
+- `flags`
+- `weekly_notes`
+- `audit_log`
+
+## Roadmap Extensions
+- Wearable API integrations (Fitbit, Oura, Apple Health)
+- ML models for anomaly detection & embeddings
+- Optional lab inputs (CRP, HbA1c, Vitamin D)
+- FHIR/EHR integration for clinical pilots
