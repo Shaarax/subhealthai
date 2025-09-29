@@ -1,6 +1,7 @@
 # SubHealthAI – Compliance & Safety (MVP)
 
-**Not a medical device; not diagnostic.** SubHealthAI provides preventive, educational insights and early-warning flags. It does **not** diagnose, treat, or cure conditions.
+⚠️ **Disclaimer:** SubHealthAI is not a medical device and does not provide diagnoses.  
+It provides preventive, educational insights and early-warning flags. It does **not** diagnose, treat, or cure conditions.
 
 ## Data Protection
 - Supabase Postgres with Row-Level Security (per-user isolation)
@@ -16,6 +17,11 @@
 - Weekly notes use schema-constrained prompts: **Signals → Flags → Interpretation → References → Disclaimer**
 - Medical disclaimer injected on every report; no diagnostic claims
 - Confidence tags + references to source signals
+
+## Regulatory Alignment (Planned)
+- Designed to follow HIPAA privacy and security principles
+- Export formats and workflows modeled on FDA digital health guidelines
+- Clinical deployment contingent on IRB approval and regulatory validation
 
 ## Intended Use
 - Early detection *support* via pattern discovery; complements clinician judgment
