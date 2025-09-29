@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "seed": "ts-node scripts/seed_demo_data.ts"
+    "seed": "tsx scripts/seed_demo_data.ts",
+    "flags:ts": "tsx scripts/compute_flags.ts",
+    "flags:py": "python scripts/flagging_engine.py"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.45.0",
