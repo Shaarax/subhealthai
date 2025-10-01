@@ -50,6 +50,11 @@ export async function GET() {
     { x: 72, y, size: 10, font, color: rgb(0.2,0.2,0.2) }
   )
 
+  // ... after Disclaimer block:
+  y -= 20;
+  page.drawText('SubHealthAI • Preventive insights (not diagnostic)', { x: 72, y, size: 9, font, color: rgb(0.35,0.35,0.35) });
+
+
   const bytes = await pdf.save()
   return new NextResponse(Buffer.from(bytes), {
     headers: {
