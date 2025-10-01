@@ -1,6 +1,6 @@
 // app/dashboard/page.tsx
 import { supabase } from '../../lib/supabase'
-
+import Trendchart from '../../components/TrendChart'
 
 function fmt(dt?: string | null) {
   return dt ? new Date(dt).toLocaleString() : ''
@@ -9,11 +9,27 @@ function fmt(dt?: string | null) {
 export default async function Dashboard() {
   const today = new Date().toISOString().slice(0, 10)
 
+  // grab last 7 rows (desc) then reverse for chart-left-to-right
   const { data: metrics } = await supabase
     .from('metrics')
     .select('day,steps,sleep_minutes,hr_avg,hrv_avg,rhr')
     .order('day', { ascending: false })
     .limit(7)
+
+  const metricsAsc = (metrics ?? []).slice().reverse()
+
+  const sleepData = metricsAsc.map((m: any) => ({
+    day: m.day.slice(5), // MM-DD
+    value: m.sleep_minutes ?? 0
+  }))
+  const hrvData = metricsAsc.map((m: any) => ({
+    day: m.day.slice(5),
+    value: m.hrv_avg ?? 0
+  }))
+  const stepsData = metricsAsc.map((m: any) => ({
+    day: m.day.slice(5),
+    value: m.steps ?? 0
+  }))
 
   const { data: flags } = await supabase
     .from('flags')
@@ -30,6 +46,31 @@ export default async function Dashboard() {
         </a>
       </div>
 
+      {/* New: Charts row */}
+      <section>
+        <h2 className="text-xl font-medium mb-3">Trends (7 days)</h2>
+        <div className="grid gap-6 md:grid-cols-3">
+          <div className="rounded-xl border bg-white">
+            <div className="border-b px-4 py-2 font-medium">Sleep (minutes)</div>
+            <div className="p-4">
+              <Trendchart data={sleepData} label="Sleep (min)" />
+            </div>
+          </div>
+          <div className="rounded-xl border bg-white">
+            <div className="border-b px-4 py-2 font-medium">HRV (avg)</div>
+            <div className="p-4">
+              <Trendchart data={hrvData} label="HRV" />
+            </div>
+          </div>
+          <div className="rounded-xl border bg-white">
+            <div className="border-b px-4 py-2 font-medium">Steps (7d)</div>
+            <div className="p-4">
+              <Trendchart data={stepsData} label="Steps" />
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section>
         <h2 className="text-xl font-medium mb-3">Last 7 Days (metrics)</h2>
         <div className="overflow-x-auto rounded-xl border">
@@ -45,7 +86,7 @@ export default async function Dashboard() {
               </tr>
             </thead>
             <tbody>
-              {(metrics ?? []).map((m: any, i: number) => (
+              {metricsAsc.map((m: any, i: number) => (
                 <tr key={i} className="border-t">
                   <td className="p-2">{m.day}</td>
                   <td className="p-2">{m.steps ?? '-'}</td>
