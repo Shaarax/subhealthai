@@ -12,6 +12,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <nav className="flex items-center gap-4 text-sm">
               <Link href="/dashboard" className="hover:underline">Dashboard</Link>
               <Link href="/weekly" className="hover:underline">Weekly Note</Link>
+              <Link href="/ingest" className="hover:underline">Ingest (Demo)</Link>
               <a href="/api/report" className="rounded-md border px-3 py-1.5 hover:bg-gray-50">Download PDF</a>
             </nav>
           </div>
