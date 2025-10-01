@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.45.0",
+    "csv-parse": "^6.1.0",
     "dayjs": "^1.11.10",
     "dotenv": "^17.2.2",
     "next": "14.2.5",
