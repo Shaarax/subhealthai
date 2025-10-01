@@ -117,6 +117,21 @@ export default async function Dashboard() {
           ))}
         </div>
       </section>
+
+      <section>
+        <h2 className="text-xl font-medium mb-3">System Jobs (Demo)</h2>
+        <form action="/api/cron" method="post">
+          <button
+            type="submit"
+            className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700"
+          >
+            Run Daily Cron (Demo)
+          </button>
+        </form>
+        <p className="mt-2 text-xs text-gray-500">
+          ⚠️ Demo only — in production this runs automatically (nightly job).
+        </p>
+      </section>
     </div>
   )
 }
