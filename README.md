@@ -82,6 +82,23 @@ This repository contains the **starter codebase**, database schema, and demo UI 
 ```
 ---
 
+You can test SubHealthAI locally in 60 seconds:
+
+1. Start the dev server:
+   ```bash
+   npm run dev
+   ```
+2. Open http://localhost:3000/ingest
+3. Upload the sample file docs/sample.csv
+4. Visit http://localhost:3000/dashboard → metrics & charts update.
+5. Click Run Daily Cron (Demo) → flags + weekly note generated.
+6. Open http://localhost:3000/weekly → weekly summary.
+7. Download PDF from http://localhost:3000/api/report 
+
+⚠️ Demo only - no PHI, not a medical device.
+
+---
+
 ## 🛠 Tech Stack
 **Frontend (App Layer)**  
 - Next.js (App Router), React, TypeScript  
@@ -130,10 +147,13 @@ Key tables in `/supabase/schema.sql`:
 **MVP (In Progress)**  
 - [x] Project scaffold: Next.js + Supabase + TailwindCSS  
 - [x] Core schema design (users, events_raw, metrics, flags, weekly_notes, audit_log)  
-- [x] Rule-based flagging engine (Python/TS) with rationale strings  
-- [ ] Demo dashboard UI (signal flags + weekly note preview)  
-- [ ] PDF export and transactional email delivery (clinician-ready reports)  
-- [ ] Seed/demo data pipeline for reproducibility  
+- [x] Rule-based flagging engine (Python + TypeScript) with rationale strings  
+- [x] Demo dashboard UI (flags + weekly note preview)  
+- [x] CSV ingest + rollup pipeline for reproducible demo data  
+- [x] Charts on dashboard (sleep, HRV trends)  
+- [x] Cron API route (demo: daily flags + weekly note generation)  
+- [x] PDF export (clinician-ready demo report)  
+- [ ] Transactional email delivery (send report to clinician)
 
 **Next Phase**  
 - [ ] Wearable API integrations (Fitbit, Oura, Garmin, Apple Health)  
@@ -149,6 +169,19 @@ Key tables in `/supabase/schema.sql`:
 - [ ] HL7 FHIR integration for clinician/EHR interoperability  
 - [ ] Pilot testing with clinical advisors under HIPAA/FDA alignment  
 - [ ] Patent filing for “System and Method for Subclinical Risk Flagging and Explainable AI Summaries”  
+
+---
+
+## 🔮 Future Integrations
+
+SubHealthAI is designed to **extend, not compete with, wearable platforms**.  
+Our value is in **cross-signal integration, explainable early-warning flags, and compliance guardrails**.
+
+Planned integrations include:
+- **Wearables**: Fitbit, Oura, Apple Health, WHOOP  
+- **Lab inputs**: CRP, HbA1c, Vitamin D (optional patient-provided)  
+- **EHR interoperability**: HL7 FHIR APIs for clinical pilots  
+- **ML models**: anomaly detection, embeddings, multimodal risk scoring
 
 ---
 

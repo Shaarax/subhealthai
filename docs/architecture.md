@@ -25,7 +25,8 @@ events_raw → metrics → flags → weekly_notes → exports (PDF/email) → au
 - `audit_log`
 
 ## Roadmap Extensions
-- Wearable API integrations (Fitbit, Oura, Apple Health)
-- ML models for anomaly detection & embeddings
-- Optional lab inputs (CRP, HbA1c, Vitamin D)
+- Wearable API integrations (Fitbit, Oura, Apple Health, WHOOP)  
+  → SubHealthAI ingests device metrics but focuses on **cross-signal integration and explainable early warning flags**, not duplicating device dashboards.  
+- ML models for anomaly detection & embeddings  
+- Optional lab inputs (CRP, HbA1c, Vitamin D)  
 - FHIR/EHR integration for clinical pilots
