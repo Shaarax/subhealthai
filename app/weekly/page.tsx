@@ -1,6 +1,7 @@
 // app/weekly/page.tsx
 import { supabase } from '../../lib/supabase'
 import GenerateWeeklyButton from '../../components/GenerateWeeklyButton' 
+import EmailButton from '../../components/EmailButton'
 
 export default async function WeeklyNote() {
   const today = new Date()
@@ -45,7 +46,10 @@ export default async function WeeklyNote() {
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-semibold">Weekly Note (demo)</h1>
-        <GenerateWeeklyButton />
+        <div className="flex items-center gap-2">
+          <EmailButton />
+          <GenerateWeeklyButton />
+        </div>
       </div>
 
       {latest?.[0] && (
