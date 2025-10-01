@@ -1,9 +1,26 @@
 // app/weekly/page.tsx
 import { supabase } from '../../lib/supabase'
+import GenerateWeeklyButton from '../../components/GenerateWeeklyButton' 
 
 export default async function WeeklyNote() {
   const today = new Date()
   const dayISO = today.toISOString().slice(0,10)
+
+  // Fetch the latest saved weekly note
+  const { data: latest } = await supabase
+    .from('weekly_notes')
+    .select('week_start, week_end, summary')
+    .order('created_at', { ascending: false })
+    .limit(1)
+
+    {!latest?.[0] && (
+      <section className="rounded-xl border p-4">
+        <h2 className="text-lg font-medium mb-2">Saved Weekly Summary</h2>
+        <p className="text-sm text-gray-600">
+          No saved weekly note yet. Click “Generate Weekly Note” to create a placeholder summary now.
+        </p>
+      </section>
+    )}
 
   // Last 7 days metrics & flags
   const { data: metrics } = await supabase
@@ -26,7 +43,20 @@ export default async function WeeklyNote() {
 
   return (
     <div className="p-6 space-y-6">
-      <h1 className="text-2xl font-semibold">Weekly Note (demo)</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-semibold">Weekly Note (demo)</h1>
+        <GenerateWeeklyButton />
+      </div>
+
+      {latest?.[0] && (
+        <section className="rounded-xl border p-4">
+          <h2 className="text-lg font-medium mb-2">Saved Weekly Summary</h2>
+          <p className="text-sm">{latest[0].summary}</p>
+          <p className="text-xs text-gray-500 mt-2">
+            Week: {latest[0].week_start} → {latest[0].week_end}
+          </p>
+        </section>
+      )}
 
       <section className="rounded-xl border p-4">
         <p className="text-sm leading-6">
