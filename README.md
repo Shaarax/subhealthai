@@ -3,7 +3,7 @@
 SubHealthAI is an **AI-powered preventive health project currently in development**.  
 Its purpose is to analyze wearable and lifestyle data to identify **early warning signals** and **subclinical patterns** that often go unnoticed in traditional healthcare.  
 The goal is not to provide a medical diagnosis, but to **support physicians today** with a long-term vision of **empowering individuals under physician oversight** by surfacing trends that may warrant preventive attention.
-The project is in active research and early validation stages following publication of its technical whitepaper on **Zenodo** (DOI: [10.5281/zenodo.17388335](https://doi.org/10.5281/zenodo.17388335)).
+The project is in active research and early validation stages following publication of its technical whitepaper on **Preprints** (DOI [10.20944/preprints202511.0156.v1](https://doi.org/10.20944/preprints202511.0156.v1)) and archival repository version on **Zenodo** (DOI: [10.5281/zenodo.17388335](https://doi.org/10.5281/zenodo.17388335)).
 
 ---
 
@@ -188,7 +188,7 @@ You can test SubHealthAI locally in 60 seconds:
   
 
 **AI & NLP Integration**  
-- LLMs (OpenAI GPT, Hugging Face transformers) for plain-language weekly notes  
+- LLMs assisted narrative generation for plain-language weekly notes  
 - Schema-enforced outputs with disclaimers and rationales stored in audit logs  
 - Compliance guardrails: prevent diagnostic claims, enforce structured reporting  
 
@@ -307,6 +307,7 @@ const response = await fetch('/api/ml/predict?type=cardio', {
 ### Important Notes
 
 ⚠️ **NON-DIAGNOSTIC USE ONLY**: The current live deployment uses pre-calculated inference results derived from our Random Forest models trained on the Pima Indians Diabetes Database to demonstrate UI responsiveness. For production medical device use, Option B (real FastAPI integration) is required with proper validation, calibration, and regulatory compliance.
+Disease-specific models are included strictly for research demonstration and are gated from production decision workflows.
 
 **For Production:**
 - Deploy FastAPI service with proper authentication/authorization
@@ -424,8 +425,6 @@ This is the official open-access preprint describing SubHealthAI’s preventive-
 - **OSF Project:** [https://osf.io/xxxxxx](https://osf.io/xxxxxx) — hosts supplementary datasets, schema snapshots, and evaluation logs (MetaArXiv moderation pending).  
 
 A peer-reviewed **IEEE submission** expanding clinical validation and multimodal integration is in preparation.
-
-*A Google Scholar profile will be added once the paper is indexed for citation visibility.*
 
 ---
 
