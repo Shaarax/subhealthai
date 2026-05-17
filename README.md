@@ -1,4 +1,4 @@
-# SubHealthAI: Early Detection Before Diagnosis
+# SubHealthAI: Explainable Preventive Health Intelligence
 
 SubHealthAI is an **AI-powered preventive health project currently in development**.  
 Its purpose is to analyze wearable and lifestyle data to identify **early warning signals** and **subclinical patterns** that often go unnoticed in traditional healthcare.  
@@ -9,7 +9,7 @@ The project is in active research and early validation stages following publicat
 
 ### Why this matters
 - Chronic diseases account for almost **90% of U.S. healthcare spending** ($4.1 trillion annually).  
-- Many conditions begin with **silent inflammation or early dysfunctions** that existing diagnostic tools miss.  
+- Many chronic conditions may begin with **silent inflammation or early physiological dysfunction** that can remain unnoticed until symptoms emerge, diagnostic thresholds are crossed, or clinical escalation occurs.
 - By offering physicians and eventually individuals a clearer view of these early risk patterns,  
 SubHealthAI has the potential to lower long-term costs and improve health outcomes.  
 - All development follows a **privacy-first design** and will align with **HIPAA and FDA digital health guidelines** during clinical testing.
@@ -42,8 +42,7 @@ SubHealthAI is different. It provides a **structured "early warning" layer** on 
    - Weekly plain-language notes for users.  
    - One-tap PDF/Email reports with tables, charts, and citations designed for physicians.
 
-By sitting between raw wearable data and clinical diagnosis, **SubHealthAI fills a critical gap**:  
-Turning fragmented signals into structured, explainable insights that support earlier interventions.
+By sitting between raw wearable data and formal clinical diagnosis, SubHealthAI addresses a critical preventive-health gap: turning fragmented signals into structured, explainable insights that may support earlier awareness, monitoring, and follow-up.
 
 ---
 
