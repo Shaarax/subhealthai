@@ -421,7 +421,7 @@ This is the official open-access preprint describing SubHealthAI’s preventive-
 
 ### 🔬 **Supporting Mirrors**
 - **Zenodo DOI:** [10.5281/zenodo.17388335](https://doi.org/10.5281/zenodo.17388335) — permanent archival copy for citation integrity and reproducibility.  
-- **OSF Project:** [https://osf.io/xxxxxx](https://osf.io/xxxxxx) — hosts supplementary datasets, schema snapshots, and evaluation logs (MetaArXiv moderation pending).  
+- **OSF Project:** [https://osf.io/gpce8](https://osf.io/gpce8/) — hosts supplementary datasets, schema snapshots, and evaluation logs (MetaArXiv moderation pending).  
 
 A peer-reviewed **IEEE submission** expanding clinical validation and multimodal integration is in preparation.
 
