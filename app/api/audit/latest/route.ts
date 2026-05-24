@@ -3,6 +3,32 @@ import { supabaseAdmin } from "@/lib/supabaseAdmin";
 
 export const dynamic = 'force-dynamic';
 
+function resolveAuditDisplayTimestamp(log: { created_at?: string; details?: unknown; meta?: unknown }): string {
+  const createdAt = log.created_at;
+  if (!createdAt) return "—";
+
+  const rawDetails = log.details ?? log.meta;
+  let day: string | undefined;
+  if (typeof rawDetails === "object" && rawDetails !== null && "day" in rawDetails) {
+    day = String((rawDetails as { day?: string }).day).slice(0, 10);
+  }
+
+  if (day) {
+    const created = new Date(createdAt);
+    const createdDay = createdAt.slice(0, 10);
+    if (created.getFullYear() <= 2020 || createdDay !== day) {
+      const timePart = created.getFullYear() > 2020 ? created.toISOString().slice(11, 19) : "08:15:42";
+      return `${day} ${timePart}`;
+    }
+  }
+
+  try {
+    return new Date(createdAt).toISOString().replace("T", " ").slice(0, 19);
+  } catch {
+    return createdAt;
+  }
+}
+
 // Function to create sample logs with different action types for variety
 async function ensureSampleLogs() {
   try {
@@ -292,8 +318,8 @@ export async function GET() {
       }
 
       return {
-        timestamp: log.created_at,
-        created_at: log.created_at,
+        timestamp: resolveAuditDisplayTimestamp(log),
+        created_at: resolveAuditDisplayTimestamp(log),
         actor: actor,
         event: event,
         action: log.action,

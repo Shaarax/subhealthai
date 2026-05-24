@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Lock, Mail, Key, Fingerprint, ShieldCheck, Activity, X } from 'lucide-react';
+import { Lock, Mail, Key, ShieldCheck, Activity, X } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { AnimatedGridBackground } from '@/components/AnimatedGridBackground';
 
@@ -87,7 +87,7 @@ export function AuthScreen({ onLogin, onNavigateBack }: AuthScreenProps) {
               <Lock className="w-5 h-5 text-cyan-400" />
             </div>
             <h2 className="text-2xl font-['Unbounded'] font-bold text-white mb-2">Secure Gateway</h2>
-            <p className="text-slate-500 text-xs font-mono uppercase tracking-wide">Restricted Access // Bio-Twin v1.0</p>
+            <p className="text-slate-500 text-xs font-mono tracking-wide">RESTRICTED ACCESS // RESEARCH PROTOTYPE v1.0</p>
           </div>
 
           {/* Tab Switcher */}
@@ -221,10 +221,10 @@ export function AuthScreen({ onLogin, onNavigateBack }: AuthScreenProps) {
           )}
         </div>
 
-        {/* Reviewer Bypass Section */}
+        {/* Demo profiles section */}
         <div className="relative">
           <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-slate-800"></div></div>
-          <div className="relative flex justify-center mb-6"><span className="bg-[#02040a] px-3 text-[9px] text-slate-600 font-mono uppercase tracking-widest border border-slate-800 rounded-full">Reviewer Bypass</span></div>
+          <div className="relative flex justify-center mb-6"><span className="bg-[#02040a] px-3 text-[9px] text-slate-600 font-mono tracking-widest border border-slate-800 rounded-full">View Demo Profiles (no login required)</span></div>
         </div>
 
         <div className="grid grid-cols-2 gap-4 opacity-80 hover:opacity-100 transition-opacity">

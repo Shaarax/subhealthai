@@ -38,7 +38,7 @@ export function DashboardShell({
   const navItems = [
     { id: 'dashboard', icon: LayoutGrid, label: 'Dashboard' },
     { id: 'insights', icon: TrendingUp, label: 'Insights' },
-    { id: 'shap', icon: GitCommit, label: 'Causal Drivers' },
+    { id: 'shap', icon: GitCommit, label: 'Feature Drivers' },
     { id: 'evidence', icon: Database, label: 'Evidence' },
     { id: 'settings', icon: Settings, label: 'Data Sources' },
   ];
@@ -91,7 +91,7 @@ export function DashboardShell({
             </h1>
             <div className="flex flex-col gap-0">
               <span className="text-[11px] font-mono font-medium text-slate-400 tracking-[0.08em] uppercase leading-tight">
-                SUBCLINICAL INTELLIGENCE ENGINE V1.0
+                SubHealthAI — Research Prototype v1.0
               </span>
               {!isRealUser ? (
                 <span className="text-[11px] font-mono font-medium text-amber-400/80 tracking-[0.08em] uppercase leading-tight">

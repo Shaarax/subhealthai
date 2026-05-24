@@ -6,6 +6,7 @@ import type {
   VolatilityPoint,
   ReliabilityBin,
 } from "@/lib/dashboardViewData";
+import { inferDriverDomain, normalizeInstabilityScore } from "@/lib/utils/dashboardUtils";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!; // server-side only
@@ -130,38 +131,46 @@ function buildDrivers(
 
   // HRV / RHR based driver
   if (vitals.hrv && vitals.rhr) {
+    const name = "Autonomic Balance (HRV vs RHR)";
     drivers.push({
-      name: "Autonomic Balance (HRV vs RHR)",
+      name,
       impact: instabilityScore > 50 ? 25 : -15,
       value: `HRV ${Math.round(vitals.hrv)} ms, RHR ${Math.round(vitals.rhr)} bpm`,
+      domain: inferDriverDomain(name),
     });
   }
 
   if (labs) {
     if (labs.hba1c_percent != null) {
+      const name = "Long-term Glycemic Load (HbA1c)";
       drivers.push({
-        name: "Long-term Glycemic Load (HbA1c)",
+        name,
         impact: labs.hba1c_percent >= 5.7 ? 15 : -5,
         value: `${labs.hba1c_percent.toFixed(1)} %`,
+        domain: inferDriverDomain(name),
       });
     }
 
     if (labs.chol_total_mg_dl != null && labs.hdl_mg_dl != null) {
       const ratio = labs.chol_total_mg_dl / labs.hdl_mg_dl;
+      const name = "Lipid Profile (TC/HDL ratio)";
       drivers.push({
-        name: "Lipid Profile (TC/HDL ratio)",
+        name,
         impact: ratio >= 4 ? 10 : -5,
         value: `TC ${labs.chol_total_mg_dl} mg/dL, HDL ${labs.hdl_mg_dl} mg/dL (ratio ~${ratio.toFixed(
           1,
         )})`,
+        domain: inferDriverDomain(name),
       });
     }
 
     if (labs.vitd_25oh_ng_ml != null) {
+      const name = "Vitamin D Status";
       drivers.push({
-        name: "Vitamin D Status",
+        name,
         impact: labs.vitd_25oh_ng_ml < 30 ? 5 : -5,
         value: `${labs.vitd_25oh_ng_ml} ng/mL`,
+        domain: inferDriverDomain(name),
       });
     }
   }
@@ -170,7 +179,8 @@ function buildDrivers(
     drivers.push({
       name: "Data coverage",
       impact: 0,
-      value: "No dominant driver detected – limited data coverage.",
+      value: "Limited data coverage — no dominant attribution available.",
+      domain: "Lifestyle",
     });
   }
 
@@ -223,8 +233,23 @@ export async function loadDashboardViewData(
   }
 
   const latestPoint = timeline?.[timeline.length - 1] ?? null;
-  const instabilityScore = latestPoint ? Math.round(Number(latestPoint.risk) * 100) : 0;
-  modelVersion = latestPoint?.model_version ?? "phase3-v1-wes";
+
+  const { data: latestRiskRow } = await supabase
+    .from("risk_scores")
+    .select("day,risk_score,model_version")
+    .eq("user_id", userId)
+    .order("day", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  let instabilityScore = 0;
+  if (latestRiskRow?.risk_score != null) {
+    instabilityScore = normalizeInstabilityScore(Number(latestRiskRow.risk_score));
+    modelVersion = latestRiskRow.model_version ?? modelVersion;
+  } else if (latestPoint) {
+    instabilityScore = normalizeInstabilityScore(Number(latestPoint.risk));
+    modelVersion = latestPoint.model_version ?? modelVersion;
+  }
 
   const status = classifyStatus(instabilityScore);
 

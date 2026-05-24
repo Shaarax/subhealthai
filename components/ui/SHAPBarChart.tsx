@@ -1,13 +1,10 @@
 "use client";
 
 import React from 'react';
-import { specialtyLabel } from '@/lib/utils/dashboardUtils';
-
 type Driver = {
   name: string;
   impact: number;
   domain?: string;
-  specialties?: string[];
 };
 
 type SHAPBarChartProps = {
@@ -24,9 +21,8 @@ export const SHAPBarChart = ({ drivers, onSelect }: SHAPBarChartProps) => {
         const isNegative = d.impact < 0; // Negative impact lowers risk (Good)
         const width = (Math.abs(d.impact) / maxVal) * 100;
         const color = isNegative ? 'bg-emerald-500' : 'bg-rose-500';
-        const domain = d.domain ? ` · ${d.domain}` : '';
-        const specialties = d.specialties ? d.specialties.map((s: string) => specialtyLabel(s as any)).join(', ') : '';
-        
+        const domain = d.domain;
+
         return (
           <div 
             key={i} 
@@ -51,11 +47,8 @@ export const SHAPBarChart = ({ drivers, onSelect }: SHAPBarChartProps) => {
                 {d.impact > 0 ? '+' : ''}{d.impact}
               </div>
             </div>
-            {(domain || specialties) && (
-              <div className="text-[9px] text-slate-500 ml-28">
-                {domain}
-                {specialties && ` · ${specialties}`}
-              </div>
+            {domain && (
+              <div className="text-[9px] text-slate-500 ml-28">{domain}</div>
             )}
           </div>
         );

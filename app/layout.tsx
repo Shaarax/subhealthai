@@ -1,6 +1,17 @@
 // app/layout.tsx
+import type { Metadata } from "next";
 import "./globals.css";
-import Script from "next/script";
+
+export const metadata: Metadata = {
+  title: "SubHealthAI — Physiological Pattern Monitoring Research Prototype",
+  description:
+    "SubHealthAI is an explainable, non-diagnostic research prototype that monitors physiological signal patterns from wearable data. Not a medical device.",
+  openGraph: {
+    title: "SubHealthAI — Physiological Pattern Monitoring Research Prototype",
+    description:
+      "SubHealthAI is an explainable, non-diagnostic research prototype that monitors physiological signal patterns from wearable data. Not a medical device.",
+  },
+};
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

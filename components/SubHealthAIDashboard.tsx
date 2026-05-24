@@ -14,7 +14,6 @@ import {
   UploadCloud, File, Plus, Trash2, Smartphone, CheckSquare, FlaskConical
 } from 'lucide-react';
 import { DEMO_PROFILES } from '@/lib/dashboardViewData';
-import { ClinicalRiskSection } from '@/components/Dashboard/ClinicalRiskSection';
 import { ClinicalReasonsCard } from '@/components/Dashboard/ClinicalReasonsCard';
 import { supabase } from '@/lib/supabase';
 // Import extracted UI components
@@ -499,9 +498,9 @@ export default function SubHealthAIDashboard({
                       isDemo={userMode === 'demo-healthy' || userMode === 'demo-risk'} 
                       userId={effectiveUserId} 
                       latestMetrics={metricSnapshot} 
-                      clinical={initialClinical} 
                       clinicalReasons={currentData?.clinicalReasons || dash?.clinicalReasons || []}
                       version={version}
+                      onViewFullAttribution={() => setActivePage('shap')}
                     />
                   </>
                 )}

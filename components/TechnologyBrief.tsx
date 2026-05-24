@@ -37,7 +37,7 @@ export const TechnologyBrief = ({ isOpen, onClose }: TechnologyBriefProps) => {
             {/* Overview */}
             <section>
               <p className="text-sm leading-relaxed">
-                SubHealthAI integrates wearable signals, biomarkers, lifestyle markers, and personalized baselines into a secure, explainable, and extensible early-signal intelligence platform.
+                SubHealthAI integrates wearable signals, biomarkers, lifestyle markers, and personalized baselines into a secure, explainable, and extensible signal-monitoring research platform.
               </p>
               <p className="text-sm leading-relaxed mt-4">
                 The system is built with modular components that work together to quantify physiological drift while ensuring transparency, robustness, and user-controlled data flows.
@@ -112,7 +112,7 @@ export const TechnologyBrief = ({ isOpen, onClose }: TechnologyBriefProps) => {
                 </div>
 
                 <div>
-                  <h3 className="text-base font-rajdhani font-semibold text-cyan-400 mb-2">Temporal Forecasting (GRU Sequence Model)</h3>
+                  <h3 className="text-base font-rajdhani font-semibold text-cyan-400 mb-2">Temporal Trend Modeling (GRU Sequence Model)</h3>
                   <ul className="list-disc list-inside space-y-1 text-sm text-slate-400 ml-4">
                     <li>Learns short-term drift direction (stable → rising → volatile)</li>
                     <li>Captures dependencies across days and multivariate signals</li>
@@ -133,7 +133,7 @@ export const TechnologyBrief = ({ isOpen, onClose }: TechnologyBriefProps) => {
                 <div>
                   <h3 className="text-base font-rajdhani font-semibold text-cyan-400 mb-2">Model Hygiene</h3>
                   <ul className="list-disc list-inside space-y-1 text-sm text-slate-400 ml-4">
-                    <li>Calibration checks (Brier score)</li>
+                    <li>Calibration checks via volatility smoothing + data-completeness monitoring</li>
                     <li>Completeness index</li>
                     <li>Drift sensitivity diagnostics</li>
                     <li>Volatility smoothing</li>
@@ -154,13 +154,13 @@ export const TechnologyBrief = ({ isOpen, onClose }: TechnologyBriefProps) => {
                 </div>
 
                 <div>
-                  <h3 className="text-base font-rajdhani font-semibold text-cyan-400 mb-1">Causal Driver Panel</h3>
+                  <h3 className="text-base font-rajdhani font-semibold text-cyan-400 mb-1">Feature Driver Panel</h3>
                   <p className="text-sm text-slate-400">Shows why the score moved</p>
                   <p className="text-sm text-slate-400">Highlights sleep debt, HRV suppression, irregular timing, load imbalance</p>
                 </div>
 
                 <div>
-                  <h3 className="text-base font-rajdhani font-semibold text-cyan-400 mb-1">Trends & Forecasts</h3>
+                  <h3 className="text-base font-rajdhani font-semibold text-cyan-400 mb-1">Trends & Patterns</h3>
                   <ul className="list-disc list-inside space-y-1 text-sm text-slate-400 ml-4">
                     <li>Daily instability trajectory</li>
                     <li>7-day HRV and sleep trends</li>

@@ -70,6 +70,7 @@ export type DashboardViewData = {
     impact: number;       // + increases Instability, – decreases it
     value: string;
     domain?: DriverDomain;
+    rationale?: string;
     specialties?: ClinicalSpecialty[];
   }[];
   drift: { metabolic: string; cardio: string; inflammation: string };
@@ -108,7 +109,7 @@ export const DEMO_PROFILES: Record<"demo-healthy" | "demo-risk", DashboardViewDa
     instabilityScore: 12,
     status: "STABLE",
     narrative:
-      "Autonomic load is low. Sleep and recovery are aligned with your 28-day baseline. Parasympathetic tone is dominant.",
+      "Autonomic load is low. Sleep and recovery are aligned with your 28-day baseline. Pattern consistent with parasympathetic dominance.",
     vitals: { hrv: 115, rhr: 48, resp: 14, temp: 98.2 },
     trends: { hrv: "up", rhr: "stable" },
     drivers: [
@@ -117,21 +118,24 @@ export const DEMO_PROFILES: Record<"demo-healthy" | "demo-risk", DashboardViewDa
         impact: -15,
         value: "1.5 h",
         domain: "Sleep",
-        specialties: ["PrimaryCare", "SleepMedicine"],
+        rationale:
+          "Adequate deep sleep is consistent with lower instability vs your 28-day baseline.",
       },
       {
         name: "Training Load",
         impact: 5,
         value: "High",
         domain: "Lifestyle",
-        specialties: ["PrimaryCare"],
+        rationale:
+          "Elevated training load is consistent with modest upward pressure on instability today.",
       },
       {
         name: "Caffeine Timing",
         impact: 2,
         value: "Early in day",
         domain: "Lifestyle",
-        specialties: ["PrimaryCare", "SleepMedicine"],
+        rationale:
+          "Earlier caffeine timing is consistent with limited contribution to today's instability index.",
       },
     ],
     drift: { metabolic: "Low", cardio: "Low", inflammation: "Normal" },
@@ -170,7 +174,7 @@ export const DEMO_PROFILES: Record<"demo-healthy" | "demo-risk", DashboardViewDa
     instabilityScore: 84,
     status: "VOLATILE",
     narrative:
-      "Suppressed HRV and elevated resting HR vs your 28-day baseline suggest ongoing subclinical stress. Sympathetic overdrive detected.",
+      "Suppressed HRV and elevated resting HR vs your 28-day baseline are consistent with ongoing subclinical stress. Pattern consistent with elevated sympathetic activity.",
     vitals: { hrv: 22, rhr: 68, resp: 18, temp: 99.1 },
     trends: { hrv: "down", rhr: "up" },
     drivers: [
@@ -179,28 +183,32 @@ export const DEMO_PROFILES: Record<"demo-healthy" | "demo-risk", DashboardViewDa
         impact: 45,
         value: "0.4 h",
         domain: "Sleep",
-        specialties: ["PrimaryCare", "SleepMedicine"],
+        rationale:
+          "Very low deep sleep is consistent with the largest upward contribution to today's instability index.",
       },
       {
         name: "hs-CRP",
         impact: 32,
         value: "3.2 mg/L",
-        domain: "Inflammation",
-        specialties: ["PrimaryCare", "Cardiology"],
+        domain: "Metabolic",
+        rationale:
+          "Elevated hs-CRP is consistent with inflammatory load contributing to instability vs baseline.",
       },
       {
         name: "Fasting Glucose",
         impact: 24,
         value: "104 mg/dL",
         domain: "Metabolic",
-        specialties: ["PrimaryCare", "Endocrinology"],
+        rationale:
+          "Fasting glucose above your typical range is consistent with metabolic pressure on the instability index.",
       },
       {
         name: "Nocturnal Respiratory Burden",
         impact: 18,
         value: "Cough / wheeze cluster",
-        domain: "Respiratory",
-        specialties: ["PrimaryCare", "Pulmonology"],
+        domain: "Lifestyle",
+        rationale:
+          "Nighttime respiratory burden is consistent with added autonomic strain in today's attribution.",
       },
     ],
     drift: { metabolic: "Moderate", cardio: "Elevated", inflammation: "Elevated" },

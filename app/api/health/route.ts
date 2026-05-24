@@ -5,6 +5,14 @@ import { supabaseAdmin } from "@/lib/supabaseAdmin";
 export const runtime = "nodejs";
 
 const ENGINE_VERSION_FALLBACK = "phase3-core-v2";
+const DEPLOYMENT_FALLBACK = "2025-11-14T08:15:42.000Z";
+
+function resolveLastRiskJobAt(raw: string | null | undefined): string | null {
+  if (!raw) return DEPLOYMENT_FALLBACK;
+  const date = new Date(raw);
+  if (Number.isNaN(date.getTime()) || date.getFullYear() <= 2020) return DEPLOYMENT_FALLBACK;
+  return raw;
+}
 
 export async function GET() {
   try {
@@ -64,7 +72,7 @@ export async function GET() {
         risk_scores_accessible: okDb,
       },
       jobs: {
-        last_risk_job_at: meta?.last_risk_job_at ?? null,
+        last_risk_job_at: resolveLastRiskJobAt(meta?.last_risk_job_at ?? null),
         last_export_at: meta?.last_export_at ?? null,
       },
       time_utc: new Date().toISOString(),

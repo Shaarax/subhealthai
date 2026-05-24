@@ -4,8 +4,48 @@ import { renderToStream } from "@react-pdf/renderer";
 
 import ReportDoc from "@/components/report/ReportDoc";
 import { DEMO_PROFILES } from "@/lib/dashboardViewData";
+import type { DashboardViewData } from "@/lib/dashboardViewData";
 import { getCurrentAppUserId } from "@/lib/getCurrentAppUserId";
 import { loadDashboardViewData } from "@/lib/dashboardLoader";
+
+async function loadReportData(userId: string, version: string): Promise<DashboardViewData> {
+  const pdfData = await loadDashboardViewData(userId);
+
+  try {
+    const base =
+      process.env.NEXT_PUBLIC_BASE_URL?.replace(/\/$/, "") ||
+      (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
+    const res = await fetch(
+      `${base}/api/dashboard?user=${encodeURIComponent(userId)}&version=${encodeURIComponent(version)}`,
+      { cache: "no-store" },
+    );
+    if (res.ok) {
+      const dash = (await res.json()) as DashboardViewData;
+      if (dash && typeof dash.instabilityScore === "number") {
+        return {
+          ...pdfData,
+          ...dash,
+          instabilityScore: dash.instabilityScore,
+          status: dash.status ?? pdfData.status,
+          narrative: dash.narrative ?? pdfData.narrative,
+          drivers:
+            Array.isArray(dash.drivers) && dash.drivers.length > 0
+              ? dash.drivers
+              : pdfData.drivers,
+          vitals: dash.vitals ?? pdfData.vitals,
+          drift: dash.drift ?? pdfData.drift,
+          labs: dash.labs?.length ? dash.labs : pdfData.labs,
+          forecast: dash.forecast?.length ? dash.forecast : pdfData.forecast,
+          volatilityIndex: dash.volatilityIndex ?? pdfData.volatilityIndex,
+        };
+      }
+    }
+  } catch (err) {
+    console.warn("[Report API] Dashboard merge skipped:", err);
+  }
+
+  return pdfData;
+}
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
@@ -30,6 +70,7 @@ export async function GET(req: Request) {
           label ??
           (demoMode === "demo-healthy" ? "Demo: Nominal" : "Demo: High Drift"),
         version: version,
+        environment: "DEMO",
         multimodal: null,
       }) as unknown as React.ReactElement,
     );
@@ -56,13 +97,14 @@ export async function GET(req: Request) {
       // Try to get from session
       appUserId = await getCurrentAppUserId();
     }
-    const data = await loadDashboardViewData(appUserId);
+    const data = await loadReportData(appUserId, version);
 
     const stream = await renderToStream(
       ReportDoc({
         data,
         userLabel: label ?? "SubHealthAI Profile",
         version: version,
+        environment: "RESEARCH",
         multimodal: null,
       }) as unknown as React.ReactElement,
     );

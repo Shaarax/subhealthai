@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useMemo } from 'react';
-import { ChevronRight, ScanLine, Brain, Globe, Zap } from 'lucide-react';
+import { ChevronRight, ScanLine, Brain, Globe, Zap, Activity, FileText } from 'lucide-react';
 import { AnimatedGridBackground } from '@/components/AnimatedGridBackground';
 import { TechnicalBrief } from '@/components/TechnicalBrief';
 import { ResearchBrief } from '@/components/ResearchBrief';
@@ -132,18 +132,17 @@ export function LandingPage({ onNavigateAuth }: LandingPageProps) {
             </div>
 
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-rajdhani font-bold leading-[1.1] text-white tracking-tight">
-              Detect <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-200 to-cyan-600">Instability</span><br />
-              Before Diagnosis.
+              Monitor <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-200 to-cyan-600">Physiological Patterns</span>.<br />
+              Understand What&apos;s Changing.
             </h1>
 
             <p className="text-lg text-slate-400 leading-relaxed font-light border-l-2 border-slate-800 pl-6">
-              SubHealthAI builds a digital twin of your autonomic nervous system to detect 
-              <span className="text-slate-200 font-medium"> sub-clinical drift</span> days before symptoms appear.
+              SubHealthAI surfaces research-associated signal patterns from wearable data — presented as an explainable, non-diagnostic summary for personal awareness.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
               <button onClick={onNavigateAuth} className="group relative px-8 py-4 bg-white text-black font-bold rounded-full hover:bg-cyan-50 transition-all duration-300 flex items-center justify-center gap-2">
-                <span>Initialize Bio-Twin</span>
+                <span>Explore the Research Prototype</span>
                 <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
               <button 
@@ -153,6 +152,54 @@ export function LandingPage({ onNavigateAuth }: LandingPageProps) {
                 View Technical Brief
               </button>
             </div>
+          </div>
+        </div>
+
+        {/* Feature Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="p-6 bg-slate-900/40 border border-slate-800/60 rounded-xl space-y-3">
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-[#0f172a] border border-slate-800 text-cyan-500">
+                <Activity className="w-5 h-5" />
+              </div>
+              <h3 className="text-lg font-rajdhani font-bold text-white">Pattern Monitoring</h3>
+            </div>
+            <p className="text-sm text-slate-400 leading-relaxed">
+              Aggregates wearable sensor streams and flags multivariate physiological drift — not disease, just change worth noticing.
+            </p>
+          </div>
+          <div className="p-6 bg-slate-900/40 border border-slate-800/60 rounded-xl space-y-3">
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-[#0f172a] border border-slate-800 text-cyan-500">
+                <Globe className="w-5 h-5" />
+              </div>
+              <h3 className="text-lg font-rajdhani font-bold text-white">Explainable Signals</h3>
+            </div>
+            <p className="text-sm text-slate-400 leading-relaxed">
+              Every output is traceable to specific feature contributions (SHAP-style attribution), so you can see exactly why the system flagged a pattern.
+            </p>
+          </div>
+          <div className="p-6 bg-slate-900/40 border border-slate-800/60 rounded-xl space-y-3">
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-[#0f172a] border border-slate-800 text-cyan-500">
+                <Brain className="w-5 h-5" />
+              </div>
+              <h3 className="text-lg font-rajdhani font-bold text-white">Research Foundation</h3>
+            </div>
+            <p className="text-sm text-slate-400 leading-relaxed">
+              Signal thresholds are grounded in peer-reviewed literature. The platform is a research prototype, not a medical device, and makes no diagnostic claims.
+            </p>
+          </div>
+          <div className="p-6 bg-slate-900/40 border border-slate-800/60 rounded-xl space-y-3">
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-[#0f172a] border border-slate-800 text-cyan-500">
+                <FileText className="w-5 h-5" />
+              </div>
+              <h3 className="text-lg font-rajdhani font-bold text-white">Shareable Summary</h3>
+            </div>
+            <p className="text-sm text-slate-400 leading-relaxed">
+              Export a plain-language PDF of your signal history to share with a clinician on your own terms — not a clinical report, just your data, organized.
+            </p>
           </div>
         </div>
 
@@ -182,15 +229,46 @@ export function LandingPage({ onNavigateAuth }: LandingPageProps) {
                 <InstabilityRing size="small" />
                 <div className="hidden sm:block w-px h-24 bg-gradient-to-b from-transparent via-slate-700 to-transparent"></div>
                 <div className="hidden sm:block space-y-1">
-                  <div className="text-xs font-mono text-slate-500 uppercase tracking-widest">Assessment</div>
+                  <div className="text-xs font-mono text-slate-500 uppercase tracking-widest">Status Band</div>
                   <div className={`text-2xl font-rajdhani font-bold ${statusColor}`}>{status}</div>
-                  <div className="text-xs text-slate-600">Confidence: 98.4%</div>
+                  <div className="text-xs text-slate-600 max-w-[12rem] leading-relaxed">Research prototype — not validated for clinical use</div>
                 </div>
               </div>
               <div className={`p-4 border-l-2 ${deepSleepHours >= 7 ? 'border-cyan-500/50 bg-cyan-950/10' : deepSleepHours >= 6 ? 'border-amber-500/50 bg-amber-950/10' : 'border-rose-500/50 bg-rose-950/10' } transition-colors duration-500`}>
                 <h4 className="text-xs font-mono text-slate-400 mb-1 uppercase tracking-wider flex items-center gap-2"><Zap className="w-3 h-3" /> System Analysis</h4>
                 <p className="text-slate-300 text-sm leading-relaxed max-w-md transition-all duration-300 ease-in-out">{narrative}</p>
               </div>
+            </div>
+          </div>
+        </div>
+
+        {/* How It Works */}
+        <div className="space-y-8">
+          <div className="space-y-2">
+            <div className="text-[10px] font-mono text-cyan-400 uppercase tracking-widest">Subclinical Intelligence Engine v1.0</div>
+            <h2 className="text-2xl md:text-3xl font-rajdhani font-bold text-white">How It Works</h2>
+            <p className="text-slate-400 max-w-2xl">From wearable streams to explainable pattern summaries — as patterns evolve over time.</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="p-5 bg-slate-900/30 border border-slate-800/60 rounded-xl space-y-2">
+              <div className="text-[10px] font-mono text-slate-500 uppercase tracking-widest">Step 01</div>
+              <h3 className="text-sm font-rajdhani font-bold text-white">Physiological Signal Model</h3>
+              <p className="text-xs text-slate-400 leading-relaxed">Ingests wearable sensor streams into a unified physiological representation.</p>
+            </div>
+            <div className="p-5 bg-slate-900/30 border border-slate-800/60 rounded-xl space-y-2">
+              <div className="text-[10px] font-mono text-slate-500 uppercase tracking-widest">Step 02</div>
+              <h3 className="text-sm font-rajdhani font-bold text-white">Drift Detection</h3>
+              <p className="text-xs text-slate-400 leading-relaxed">Surfaces multivariate drift patterns relative to your personal baseline.</p>
+            </div>
+            <div className="p-5 bg-slate-900/30 border border-slate-800/60 rounded-xl space-y-2">
+              <div className="text-[10px] font-mono text-slate-500 uppercase tracking-widest">Step 03</div>
+              <h3 className="text-sm font-rajdhani font-bold text-white">Pattern Flagging</h3>
+              <p className="text-xs text-slate-400 leading-relaxed">AI flags pattern changes for personal awareness — not for clinical action.</p>
+            </div>
+            <div className="p-5 bg-slate-900/30 border border-slate-800/60 rounded-xl space-y-2">
+              <div className="text-[10px] font-mono text-slate-500 uppercase tracking-widest">Step 04</div>
+              <h3 className="text-sm font-rajdhani font-bold text-white">Explainable Output</h3>
+              <p className="text-xs text-slate-400 leading-relaxed">SHAP-style attribution shows which features contributed to each flagged pattern.</p>
             </div>
           </div>
         </div>
@@ -231,10 +309,17 @@ export function LandingPage({ onNavigateAuth }: LandingPageProps) {
           </div>
         </div>
 
+        {/* Builder */}
+        <div className="p-8 bg-slate-900/20 border border-slate-800/50 rounded-xl">
+          <p className="text-sm text-slate-400 leading-relaxed max-w-3xl">
+            Built by an AI/systems architect with a background in large-scale data engineering (telecom → wearable integration) to demonstrate explainable health-signal monitoring at scale.
+          </p>
+        </div>
+
         {/* Footer */}
         <div className="border-t border-slate-800/50 pt-8 pb-12">
-          <p className="text-xs font-mono text-slate-500 text-center">
-            SubHealthAI is a non-diagnostic research and wellness system. It is not a medical device.
+          <p className="text-xs font-mono text-slate-500 text-center leading-relaxed max-w-2xl mx-auto">
+            SubHealthAI is a non-diagnostic research prototype. It does not detect, predict, screen for, or diagnose any medical condition. Outputs are informational pattern summaries for personal awareness only. Not a medical device. Not FDA-evaluated.
           </p>
         </div>
       </div>

@@ -19,7 +19,7 @@ export const ResearchBrief = ({ isOpen, onClose }: ResearchBriefProps) => {
           {/* Header */}
           <div className="flex items-start justify-between mb-8 pb-6 border-b border-slate-800">
             <div>
-              <h1 className="text-3xl font-['Unbounded'] font-bold text-white mb-2">RESEARCH — Early Detection of Physiological Drift</h1>
+              <h1 className="text-3xl font-['Unbounded'] font-bold text-white mb-2">RESEARCH — Monitoring Physiological Drift</h1>
             </div>
             <button
               onClick={onClose}
@@ -37,7 +37,7 @@ export const ResearchBrief = ({ isOpen, onClose }: ResearchBriefProps) => {
                 SubHealthAI investigates how human physiology changes over time by analyzing subtle deviations in sleep quality, autonomic balance, metabolic strain, recovery patterns, and behavioral regularity.
               </p>
               <p className="text-sm leading-relaxed mt-4">
-                The focus is <span className="text-slate-200 font-medium">subclinical drift</span>—physiological instability that emerges before noticeable symptoms or performance decline.
+                The focus is <span className="text-slate-200 font-medium">subclinical drift</span>—physiological instability — small deviations in recovery, metabolic load, and circadian regularity.
               </p>
             </section>
 
@@ -60,7 +60,7 @@ export const ResearchBrief = ({ isOpen, onClose }: ResearchBriefProps) => {
                 <div>
                   <h3 className="text-base font-rajdhani font-semibold text-cyan-400 mb-2">Sleep Architecture</h3>
                   <ul className="list-disc list-inside space-y-1 text-sm text-slate-400 ml-4">
-                    <li>Deep sleep variance and REM fragmentation are early predictors of instability.</li>
+                    <li>Deep sleep variance and REM fragmentation are research-associated indicators of autonomic drift.</li>
                     <li>Irregular sleep timing disrupts circadian alignment and recovery pathways.</li>
                   </ul>
                 </div>
@@ -113,7 +113,7 @@ export const ResearchBrief = ({ isOpen, onClose }: ResearchBriefProps) => {
                 </div>
 
                 <div>
-                  <h3 className="text-base font-rajdhani font-semibold text-cyan-400 mb-2">GRU Sequence Forecasting</h3>
+                  <h3 className="text-base font-rajdhani font-semibold text-cyan-400 mb-2">GRU Sequence Trend Modeling</h3>
                   <ul className="list-disc list-inside space-y-1 text-sm text-slate-400 ml-4">
                     <li>Learned the direction of drift (increasing, stable, or volatile).</li>
                     <li>Captured patterns across autonomic metrics, sleep stages, and circadian timing.</li>
@@ -125,7 +125,7 @@ export const ResearchBrief = ({ isOpen, onClose }: ResearchBriefProps) => {
                   <h3 className="text-base font-rajdhani font-semibold text-cyan-400 mb-2">Rolling Baseline Stability</h3>
                   <ul className="list-disc list-inside space-y-1 text-sm text-slate-400 ml-4">
                     <li>28-day personal baselines adapted correctly to lifestyle changes.</li>
-                    <li>Weekly volatility strongly correlated with predicted instability shifts.</li>
+                    <li>Weekly volatility strongly correlated with observed instability shifts.</li>
                   </ul>
                 </div>
 
@@ -154,7 +154,7 @@ export const ResearchBrief = ({ isOpen, onClose }: ResearchBriefProps) => {
                 No diagnostic modeling, disease classification, or clinical inference was performed.
               </p>
               <p className="text-sm leading-relaxed">
-                All tests were exploratory and focused solely on wellness-oriented early-signal detection.
+                All tests were exploratory and focused solely on wellness-oriented drift monitoring.
               </p>
             </section>
 
@@ -165,10 +165,10 @@ export const ResearchBrief = ({ isOpen, onClose }: ResearchBriefProps) => {
                 The goal of SubHealthAI's research program is to:
               </p>
               <ul className="list-disc list-inside space-y-1 text-sm text-slate-400 ml-4">
-                <li>Understand early warning signals in human physiology</li>
+                <li>Characterize physiological drift patterns from wearable data</li>
                 <li>Quantify subtle deviations in recovery, sleep, stress load, and metabolic patterns</li>
                 <li>Build transparent, personalized drift metrics</li>
-                <li>Enable proactive lifestyle awareness before symptoms emerge</li>
+                <li>Enable proactive lifestyle awareness through transparent pattern summaries</li>
               </ul>
               <p className="text-sm leading-relaxed mt-4">
                 This research provides the scientific foundation for SubHealthAI's non-diagnostic Instability Engine.

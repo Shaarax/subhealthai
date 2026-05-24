@@ -34,7 +34,7 @@ export const TechnicalBrief = ({ isOpen, onClose }: TechnicalBriefProps) => {
             {/* Overview */}
             <section>
               <p className="text-sm leading-relaxed">
-                SubHealthAI's Instability Engine estimates short-term physiological instability by analyzing autonomic nervous system patterns captured from consumer wearables. Instead of predicting diseases, the system focuses on detecting <span className="text-slate-200 font-medium">sub-clinical drift</span> — small deviations in sleep, recovery, metabolic load, and cardiovascular balance that often precede symptoms.
+                SubHealthAI's Instability Engine estimates short-term physiological instability by analyzing autonomic nervous system patterns captured from consumer wearables. Instead of predicting diseases, the system focuses on detecting <span className="text-slate-200 font-medium">sub-clinical drift</span> — small deviations in sleep, recovery, metabolic load, and cardiovascular balance that may accompany physiological drift.
               </p>
             </section>
 
@@ -61,8 +61,8 @@ export const TechnicalBrief = ({ isOpen, onClose }: TechnicalBriefProps) => {
                   <p className="text-sm text-slate-400">Isolation Forest + time-series deltas to quantify physiological deviation</p>
                 </div>
                 <div>
-                  <h3 className="text-base font-rajdhani font-semibold text-cyan-400 mb-1">Forecasting</h3>
-                  <p className="text-sm text-slate-400">GRU-based sequence model projects next-day instability band</p>
+                  <h3 className="text-base font-rajdhani font-semibold text-cyan-400 mb-1">Trend Modeling</h3>
+                  <p className="text-sm text-slate-400">GRU-based sequence model characterizes short-term drift direction (stable → rising → volatile)</p>
                 </div>
                 <div>
                   <h3 className="text-base font-rajdhani font-semibold text-cyan-400 mb-1">Explainability</h3>
@@ -70,7 +70,7 @@ export const TechnicalBrief = ({ isOpen, onClose }: TechnicalBriefProps) => {
                 </div>
                 <div>
                   <h3 className="text-base font-rajdhani font-semibold text-cyan-400 mb-1">Model Hygiene</h3>
-                  <p className="text-sm text-slate-400">Calibration via Brier score; volatility + completeness monitoring</p>
+                  <p className="text-sm text-slate-400">Calibration checks via volatility smoothing + data-completeness monitoring</p>
                 </div>
               </div>
             </section>
@@ -85,7 +85,7 @@ export const TechnicalBrief = ({ isOpen, onClose }: TechnicalBriefProps) => {
                 <li>A 0–100 Instability Score</li>
                 <li>Trend direction (stable, drifting, volatile)</li>
                 <li>Daily driver attribution (e.g., sleep depth, load, recovery, timing)</li>
-                <li>Non-diagnostic insights on physiological imbalance</li>
+                <li>Non-diagnostic pattern summaries for personal awareness</li>
               </ul>
             </section>
 

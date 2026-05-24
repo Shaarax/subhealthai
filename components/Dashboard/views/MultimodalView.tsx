@@ -184,7 +184,7 @@ export const MultimodalView = ({ profile, data, trendsData, isDemo, isRealUser, 
                      <th className="py-3 px-4">Value</th>
                      <th className="py-3 px-4">Ref Range</th>
                      <th className="py-3 px-4">Status</th>
-                     <th className="py-3 px-4">Risk Contribution</th>
+                     <th className="py-3 px-4">Signal Contribution</th>
                    </tr>
                  </thead>
                  <tbody className="divide-y divide-slate-800/50">

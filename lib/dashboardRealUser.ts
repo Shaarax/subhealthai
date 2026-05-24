@@ -1,5 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 import type { DashboardViewData, ForecastPoint, VolatilityPoint } from "@/lib/dashboardViewData";
+import { normalizeInstabilityScore } from "@/lib/utils/dashboardUtils";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
@@ -51,7 +52,7 @@ export async function buildRealUserDashboard(userId: string): Promise<DashboardV
 
   const latest = risks[risks.length - 1];
 
-  const instabilityScore = Math.round(Number(latest.risk) * 100);
+  const instabilityScore = normalizeInstabilityScore(Number(latest.risk));
   const status: DashboardViewData["status"] =
     instabilityScore < 33 ? "STABLE" : instabilityScore < 66 ? "ELEVATED" : "VOLATILE";
 

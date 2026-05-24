@@ -10,8 +10,13 @@ import {
 
 import {
   DashboardViewData,
-  ClinicalSpecialty,
 } from "@/lib/dashboardViewData";
+import { formatNumber } from "@/lib/utils/dashboardUtils";
+
+const PDF_FOOTER =
+  "Non-diagnostic pattern summary for personal awareness. Not intended for medical decision-making. All demo values are synthetic and for illustration only.";
+
+const formatVital = (value: number | null | undefined) => formatNumber(value, 1);
 
 // ----------------- Styles -----------------
 
@@ -274,43 +279,13 @@ const isDashboardViewData = (data: any): data is DashboardViewData => {
   );
 };
 
-const specialtyLabel = (s: ClinicalSpecialty): string => {
-  switch (s) {
-    case "PrimaryCare":
-      return "Primary care / internal medicine";
-    case "Cardiology":
-      return "Cardiology";
-    case "Endocrinology":
-      return "Endocrinology";
-    case "Nephrology":
-      return "Nephrology";
-    case "Pulmonology":
-      return "Pulmonology / respiratory medicine";
-    case "SleepMedicine":
-      return "Sleep medicine";
-    default:
-      return s;
-  }
-};
-
-const extractSpecialties = (data: DashboardViewData): string[] => {
-  const set = new Set<string>();
-  for (const d of data.drivers || []) {
-    if (d.specialties) {
-      for (const sp of d.specialties) {
-        set.add(specialtyLabel(sp));
-      }
-    }
-  }
-  return Array.from(set);
-};
-
 // ----------------- Component -----------------
 
 type ReportDocProps = {
   data: any;
   userLabel?: string;
   version?: string;
+  environment?: string;
   multimodal?: any;
   clinicalConditions?: Array<{
     name: string;
@@ -323,7 +298,14 @@ type ReportDocProps = {
   }>;
 };
 
-export default function ReportDoc({ data, userLabel, version, multimodal, clinicalConditions }: ReportDocProps) {
+export default function ReportDoc({
+  data,
+  userLabel,
+  version,
+  environment = "DEMO",
+  multimodal,
+  clinicalConditions,
+}: ReportDocProps) {
   const isViewData = isDashboardViewData(data);
 
   // ========== DEMO / DASHBOARDVIEWDATA PATH ==========
@@ -332,7 +314,6 @@ export default function ReportDoc({ data, userLabel, version, multimodal, clinic
     const displayUser = userLabel?.trim() || "Demo Profile";
     const modelVersion = version || "phase3-v1-wes";
     const riskPercent = data.instabilityScore;
-    const specialties = extractSpecialties(data);
 
     return (
       <Document>
@@ -341,7 +322,7 @@ export default function ReportDoc({ data, userLabel, version, multimodal, clinic
           <View style={styles.header}>
             <Text style={styles.title}>SubHealthAI — Preventive Insight Report</Text>
             <Text style={styles.subtitle}>
-              {displayUser} · Engine: {modelVersion} · Environment: DEMO
+              {displayUser} · Engine: {modelVersion} · Environment: {environment}
             </Text>
           </View>
 
@@ -350,7 +331,7 @@ export default function ReportDoc({ data, userLabel, version, multimodal, clinic
               INSTABILITY SUMMARY (NON-DIAGNOSTIC)
             </Text>
             <Text style={styles.sectionSubtitle}>
-              Latest Instability risk vs personal baseline
+              Latest Instability Score vs personal baseline
             </Text>
 
             <View style={styles.scoreRow}>
@@ -387,9 +368,6 @@ export default function ReportDoc({ data, userLabel, version, multimodal, clinic
                 const direction =
                   driver.impact > 0 ? "↑ Instability" : "↓ Instability";
                 const domain = driver.domain ? ` · Domain: ${driver.domain}` : "";
-                const specLabels = driver.specialties
-                  ? driver.specialties.map(specialtyLabel).join(", ")
-                  : "";
 
                 return (
                   <View key={idx} style={styles.bulletItem}>
@@ -398,8 +376,7 @@ export default function ReportDoc({ data, userLabel, version, multimodal, clinic
                     </Text>
                     <Text style={styles.bulletText}>
                       {driver.name} – {driver.value} ({direction}
-                      {domain}
-                      {specLabels ? ` · Relevant: ${specLabels}` : ""})
+                      {domain})
                     </Text>
                   </View>
                 );
@@ -407,10 +384,7 @@ export default function ReportDoc({ data, userLabel, version, multimodal, clinic
             </View>
           </View>
 
-          <Text style={styles.disclaimer}>
-            Research prototype. Non-diagnostic. Not FDA-cleared. Do not use as
-            sole basis for clinical decision-making.
-          </Text>
+          <Text style={styles.disclaimer}>{PDF_FOOTER}</Text>
         </Page>
 
         {/* PAGE 2 — VITALS & SLEEP */}
@@ -427,19 +401,19 @@ export default function ReportDoc({ data, userLabel, version, multimodal, clinic
             <View style={styles.vitalsRow}>
               <View style={styles.vitalBlock}>
                 <Text style={styles.vitalLabel}>HRV (rmssd)</Text>
-                <Text style={styles.vitalValue}>{data.vitals.hrv} ms</Text>
+                <Text style={styles.vitalValue}>{formatVital(data.vitals.hrv)} ms</Text>
               </View>
               <View style={styles.vitalBlock}>
                 <Text style={styles.vitalLabel}>Resting Heart Rate</Text>
-                <Text style={styles.vitalValue}>{data.vitals.rhr} bpm</Text>
+                <Text style={styles.vitalValue}>{formatVital(data.vitals.rhr)} bpm</Text>
               </View>
               <View style={styles.vitalBlock}>
                 <Text style={styles.vitalLabel}>Respiratory Rate</Text>
-                <Text style={styles.vitalValue}>{data.vitals.resp} rpm</Text>
+                <Text style={styles.vitalValue}>{formatVital(data.vitals.resp)} rpm</Text>
               </View>
               <View style={styles.vitalBlock}>
                 <Text style={styles.vitalLabel}>Skin Temperature</Text>
-                <Text style={styles.vitalValue}>{data.vitals.temp} °F</Text>
+                <Text style={styles.vitalValue}>{formatVital(data.vitals.temp)} °F</Text>
               </View>
             </View>
           </View>
@@ -488,19 +462,15 @@ export default function ReportDoc({ data, userLabel, version, multimodal, clinic
             </View>
           </View>
 
-          <Text style={styles.disclaimer}>
-            Non-diagnostic signal intended for clinician-guided preventive care
-            discussions. Do not use for medical decision-making without expert
-            oversight.
-          </Text>
+          <Text style={styles.disclaimer}>{PDF_FOOTER}</Text>
         </Page>
 
-        {/* PAGE 3 — LABS, FORECAST, MODEL BEHAVIOR, ROUTING HINTS */}
+        {/* PAGE 3 — LABS & MODEL BEHAVIOR */}
         <Page size="A4" style={styles.page}>
           <View style={styles.header}>
             <Text style={styles.title}>Biomarkers & Model Behavior</Text>
             <Text style={styles.subtitle}>
-              Labs (demo), forecast, volatility and reliability (internal)
+              Labs (demo), trend, volatility and model stability (internal)
             </Text>
           </View>
 
@@ -525,14 +495,14 @@ export default function ReportDoc({ data, userLabel, version, multimodal, clinic
           </View>
 
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Forecast & Model Stability (Demo)</Text>
+            <Text style={styles.sectionTitle}>Trend & Model Stability (Demo)</Text>
             <Text style={styles.sectionSubtitle}>
               Summary statistics derived from internal validation (not clinical performance)
             </Text>
 
             <View style={styles.modelStatsRow}>
               <View style={styles.modelStatBlock}>
-                <Text style={styles.modelStatLabel}>Instability Forecast (14 days)</Text>
+                <Text style={styles.modelStatLabel}>Instability Trend (14 days)</Text>
                 <Text style={styles.modelStatValue}>
                   {data.forecast && data.forecast.length > 0
                     ? `${Math.round(
@@ -542,58 +512,15 @@ export default function ReportDoc({ data, userLabel, version, multimodal, clinic
                 </Text>
               </View>
               <View style={styles.modelStatBlock}>
-                <Text style={styles.modelStatLabel}>Volatility Index (σ)</Text>
+                <Text style={styles.modelStatLabel}>Volatility Index (sigma)</Text>
                 <Text style={styles.modelStatValue}>
                   {data.volatilityIndex ?? "—"}
-                </Text>
-              </View>
-              <View style={styles.modelStatBlock}>
-                <Text style={styles.modelStatLabel}>Reliability Error (%)</Text>
-                <Text style={styles.modelStatValue}>
-                  {data.reliability != null ? `${data.reliability}%` : "—"}
                 </Text>
               </View>
             </View>
           </View>
 
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>
-              Clinical routing hints (non-diagnostic)
-            </Text>
-            <Text style={styles.sectionSubtitle}>
-              Intended to help direct further evaluation; not a diagnosis
-            </Text>
-
-            {specialties.length === 0 ? (
-              <Text style={styles.narrativeText}>
-                No specific specialties highlighted in this demo profile. In
-                real deployments, routing hints would be derived from the
-                dominant domains and drivers contributing to Instability.
-              </Text>
-            ) : (
-              <>
-                <Text style={styles.narrativeText}>
-                  Based on the current pattern of wearable signals and demo lab
-                  markers, the following specialties may be most relevant for
-                  clinician-guided review:
-                </Text>
-                <View style={styles.bulletList}>
-                  {specialties.map((label, idx) => (
-                    <View key={idx} style={styles.bulletItem}>
-                      <Text style={styles.bulletSymbol}>•</Text>
-                      <Text style={styles.bulletText}>{label}</Text>
-                    </View>
-                  ))}
-                </View>
-              </>
-            )}
-          </View>
-
-          <Text style={styles.disclaimer}>
-            Non-diagnostic signal intended for clinician-guided preventive care
-            discussions. Do not use for medical decision-making without expert
-            oversight. All demo values are synthetic and for illustration only.
-          </Text>
+          <Text style={styles.disclaimer}>{PDF_FOOTER}</Text>
         </Page>
       </Document>
     );
@@ -671,11 +598,7 @@ export default function ReportDoc({ data, userLabel, version, multimodal, clinic
           </Text>
         </View>
 
-        <Text style={styles.disclaimer}>
-          Research prototype. Non-diagnostic signal intended for clinician-guided
-          preventive care discussions. Do not use as sole basis for medical
-          decision-making without expert oversight.
-        </Text>
+        <Text style={styles.disclaimer}>{PDF_FOOTER}</Text>
       </Page>
     </Document>
   );
