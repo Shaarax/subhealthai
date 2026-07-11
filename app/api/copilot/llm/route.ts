@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 
 import { SYSTEM_PROMPT } from "@/lib/copilot/systemPrompt";
 import { toolSpecs } from "@/lib/copilot/tools";
+import { resolveActingUser } from "@/lib/authUser";
 
 const BASE = process.env.LLM_BASE_URL!;
 const KEY = process.env.LLM_API_KEY!;
@@ -62,6 +63,19 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "missing user" }, { status: 400 });
     }
 
+    // H3: derive the acting user from the session (demo ids pass through).
+    // NOTE: this route's tool executor still self-fetches session-gated routes
+    // (/api/anomaly, /api/explain/summary) without forwarding the caller's
+    // cookies, so those tools will return errors for real users. This route is
+    // not wired to the client; a proper fix should call the data functions
+    // directly (see app/api/report/route.ts). Tracked as H3 follow-up.
+    let actingUser: string;
+    try {
+      ({ id: actingUser } = await resolveActingUser(user));
+    } catch {
+      return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+    }
+
     const initial = await fetch(`${BASE}/chat/completions`, {
       method: "POST",
       headers: {
@@ -76,7 +90,7 @@ export async function POST(req: Request) {
           { role: "system", content: SYSTEM_PROMPT },
           {
             role: "user",
-            content: `User: ${user}\nVersion: ${version}\nQuestion: ${query}`,
+            content: `User: ${actingUser}\nVersion: ${version}\nQuestion: ${query}`,
           },
         ],
       }),
@@ -87,7 +101,7 @@ export async function POST(req: Request) {
     if (toolCall) {
       const name = toolCall.function?.name;
       const args = JSON.parse(toolCall.function?.arguments || "{}");
-      if (!args.user) args.user = user;
+      if (!args.user) args.user = actingUser;
       if (!args.version) args.version = version;
 
       const result = await callTool(name, args);
@@ -105,7 +119,7 @@ export async function POST(req: Request) {
             { role: "system", content: SYSTEM_PROMPT },
             {
               role: "user",
-              content: `User: ${user}\nVersion: ${version}\nQuestion: ${query}`,
+              content: `User: ${actingUser}\nVersion: ${version}\nQuestion: ${query}`,
             },
             {
               role: "tool",

@@ -26,3 +26,30 @@ export async function resolveOwnUserId(userParam?: string | null): Promise<strin
 
   return sessionId;
 }
+
+/** Synthetic profiles served publicly (no session) by the research demo. */
+export const DEMO_USER_IDS = new Set(["demo", "demo-healthy", "demo-risk"]);
+
+export function isDemoUser(userParam?: string | null): boolean {
+  return !!userParam && DEMO_USER_IDS.has(userParam.trim());
+}
+
+/**
+ * Resolve the acting user for body-based routes (e.g. the copilot) that must
+ * also serve the public demo profiles.
+ *
+ * - Demo id  → passed through unchanged as read-only synthetic (no session
+ *   required), so the NIW demonstration keeps working.
+ * - Anything else → delegates to {@link resolveOwnUserId}: a real session is
+ *   required and the id must be the caller's own (closes finding H3, the
+ *   copilot cross-user IDOR).
+ */
+export async function resolveActingUser(
+  userParam?: string | null,
+): Promise<{ id: string; isDemo: boolean }> {
+  if (isDemoUser(userParam)) {
+    return { id: userParam!.trim(), isDemo: true };
+  }
+  const id = await resolveOwnUserId(userParam);
+  return { id, isDemo: false };
+}

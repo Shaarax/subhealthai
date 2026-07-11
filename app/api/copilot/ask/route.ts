@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
 import { toolSchemas } from "@/lib/copilotTools";
 import { runTool } from "@/lib/copilotExec";
+import { resolveActingUser } from "@/lib/authUser";
 
 // Mark this route as dynamic to prevent build-time execution
 export const dynamic = 'force-dynamic';
@@ -42,6 +43,16 @@ export async function POST(req: NextRequest) {
   }
 
   const { user, version = "phase3-v1-wes", messages } = await req.json();
+
+  // H3: derive the acting user from the session (demo ids pass through); the
+  // body-supplied `user` can never select another user's data.
+  let actingUser: string;
+  try {
+    ({ id: actingUser } = await resolveActingUser(user));
+  } catch {
+    return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+  }
+
   const client = getClient();
 
   const msg = [
@@ -73,7 +84,7 @@ export async function POST(req: NextRequest) {
 
     const name = 'function' in toolCall ? toolCall.function.name : '';
     const rawArgs = parseArgs('function' in toolCall ? (toolCall.function.arguments || "{}") : "{}");
-    const args = { user, version, ...rawArgs };
+    const args = { user: actingUser, version, ...rawArgs };
     const result = await runTool(name, args);
     toolResults[name] = result;
 

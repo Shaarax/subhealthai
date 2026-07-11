@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { getAnomaly } from "@/lib/copilot/toolsRunner";
+import { resolveActingUser } from "@/lib/authUser";
 
 export const runtime = "nodejs";
 
@@ -12,7 +13,15 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "missing user" }, { status: 400 });
     }
 
-    const anomaly = await getAnomaly({ user });
+    // H3: resolve the acting user from the session; demo ids pass through.
+    let acting;
+    try {
+      acting = await resolveActingUser(user);
+    } catch {
+      return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+    }
+
+    const anomaly = await getAnomaly({ user: acting.id });
 
     const summary = anomaly?.summary ?? "No anomaly summary available.";
     const entries = anomaly?.entries ?? [];

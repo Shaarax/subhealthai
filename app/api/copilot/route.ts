@@ -2,6 +2,7 @@ import OpenAI from "openai";
 import { NextRequest, NextResponse } from "next/server";
 import { CopilotContext, getDashboard, getExplain, getAnomaly, getMetricTrend, reportLink } from "@/lib/copilot/tools";
 import { getMultimodalRiskForReport } from "@/lib/server/multimodalRisk";
+import { resolveActingUser } from "@/lib/authUser";
 
 // Mark this route as dynamic to prevent build-time execution
 export const dynamic = 'force-dynamic';
@@ -159,7 +160,16 @@ export async function POST(req: NextRequest) {
       messages: { role: "user" | "assistant"; content: string }[];
     };
 
-    const ctx = CopilotContext.parse({ user, version, range });
+    // H3: derive the acting user from the session (demo ids pass through).
+    // Never trust the body-supplied `user` to select another user's data.
+    let actingUser: string;
+    try {
+      ({ id: actingUser } = await resolveActingUser(user));
+    } catch {
+      return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+    }
+
+    const ctx = CopilotContext.parse({ user: actingUser, version, range });
     const lastUser = messages?.slice().reverse().find(m => m.role === "user")?.content ?? "";
     const intent = detectIntent(lastUser);
     const metric = detectMetric(lastUser);

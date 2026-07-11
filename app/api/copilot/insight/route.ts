@@ -2,6 +2,7 @@ export const runtime = 'nodejs';
 
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import { resolveActingUser } from "@/lib/authUser";
 
 export async function POST(req: Request) {
   try {
@@ -9,6 +10,20 @@ export async function POST(req: Request) {
     if (!body?.user_id || !body?.day) {
       return NextResponse.json({ error: "user_id and day required" }, { status: 400 });
     }
+
+    // H3: this endpoint reads real per-user risk/SHAP rows, so it requires the
+    // caller's own authenticated session; the body user_id cannot select
+    // another user. Demo profiles have no such rows and are not supported here.
+    let acting;
+    try {
+      acting = await resolveActingUser(body.user_id);
+    } catch {
+      return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+    }
+    if (acting.isDemo) {
+      return NextResponse.json({ error: "demo profiles are not supported here" }, { status: 400 });
+    }
+    const userId = acting.id;
 
     const sb = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -19,13 +34,13 @@ export async function POST(req: Request) {
       sb
         .from("risk_scores")
         .select("risk_score")
-        .eq("user_id", body.user_id)
+        .eq("user_id", userId)
         .eq("day", body.day)
         .maybeSingle(),
       sb
         .from("v_shap_topk")
         .select("feature,value")
-        .eq("user_id", body.user_id)
+        .eq("user_id", userId)
         .eq("day", body.day),
     ]);
 
