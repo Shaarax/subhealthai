@@ -256,6 +256,26 @@ SubHealthAI is not a medical device and does not diagnose, treat, or predict dis
 - Deterministic analytics with grounded AI explanations
 - Separation between research demonstrations and validated product capabilities
 
+### Wearable-Derived Metrics & Terminology
+
+SubHealthAI uses data from users' **existing** wearables and health-data
+platforms (no proprietary hardware). Connected sources yield: (1) authorized
+raw physiological measurements, (2) **provider-native scores that stay
+attributed to the provider** (e.g. `WHOOP Recovery Score`, `Oura Readiness
+Score`, `Fitbit Sleep Score`) and are never presented as SubHealthAI outputs or
+reverse-engineered, and (3) SubHealthAI-derived, versioned, baseline-relative
+indicators.
+
+**Terminology.** Until documented analytical + scientific validation exists,
+derived indicators are described only as a *derived physiological indicator*,
+*digital measure*, *baseline-relative signal*, *research-associated pattern*, or
+*candidate digital biomarker*. The term **“validated digital biomarker” is not
+used** without that validation. ("Biomarker" remains correct for laboratory
+analytes such as HbA1c, glucose, hs-CRP, and lipids.)
+
+Full spec, indicator registry, harmonization rules, and current status:
+[docs/wearable-derived-metrics.md](docs/wearable-derived-metrics.md).
+
 ### Implementation Status (audited 2026-07-11, branch `feature/productEnhancement`)
 
 This roadmap tracks the *target* platform. Per project policy, items are only checked when they work in the repository. A full repository audit was performed on 2026-07-11; current honest status:
@@ -286,6 +306,8 @@ See the branch audit notes for the full Critical/High/Medium findings and the se
 - [ ] Add encrypted provider-token handling
 - [ ] Implement historical + incremental synchronization
 - [ ] Add provider-record deduplication and canonical normalization
+- [ ] Ingest provider-native scores with explicit per-provider attribution (never rebranded as SubHealthAI outputs)
+- [ ] Cross-provider harmonization: preserve raw records + provider identity, store canonical values separately, record device changes / provider-switch gaps, allow calibration metadata; never silently combine incompatible measurements
 - [ ] Add sync status, retry behavior, and revocation
 - [ ] Implement first production-quality wearable provider
 
@@ -298,6 +320,9 @@ Routine wearable CSV upload is not intended as the primary consumer experience. 
 - [ ] Reproducible Instability Index calculations
 - [ ] Longitudinal trend and volatility analysis
 - [ ] Versioned feature attribution
+- [ ] Versioned derived-indicator registry — each indicator records definition, input signals, minimum data, window, missing-data behavior, unit handling, baseline + algorithm version, data-quality status, timestamp, attribution, and known limitations
+- [ ] Change-point detection, circadian disruption, sleep regularity, autonomic deviation, and persistent HRV/RHR-deviation indicators
+- [ ] Enforce candidate-digital-biomarker terminology (no "validated" claims) across UI, reports, and AI output
 - [ ] Source provenance and data-quality limitations
 
 **Phase 4 — Laboratory and Health-Record Context**
