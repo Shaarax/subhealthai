@@ -4,7 +4,30 @@ import { applyFlagsForDay, applyFlagsForDayWithBaseline } from '../../../lib/fla
 
 function ymd(d: Date) { return d.toISOString().slice(0,10) }
 
+/**
+ * C3: this endpoint triggers flag computation and weekly-note (LLM) generation,
+ * so it must not be publicly callable. Authorize via a shared CRON_SECRET,
+ * supplied either as `Authorization: Bearer <secret>` (Vercel Cron style) or a
+ * `?key=<secret>` query param for manual runs. Fails closed when CRON_SECRET is
+ * not configured.
+ */
+function cronAuthorized(req: Request): boolean {
+  const secret = process.env.CRON_SECRET
+  if (!secret) return false
+  const auth = req.headers.get('authorization')
+  if (auth === `Bearer ${secret}`) return true
+  try {
+    return new URL(req.url).searchParams.get('key') === secret
+  } catch {
+    return false
+  }
+}
+
 export async function POST(req: Request) {
+  if (!cronAuthorized(req)) {
+    return NextResponse.json({ ok: false, error: 'unauthorized' }, { status: 401 })
+  }
+
   // Accept day from querystring OR form POST (demo button posts a form)
   const url = new URL(req.url)
   let day = url.searchParams.get('day') || ymd(new Date())
