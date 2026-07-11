@@ -314,6 +314,19 @@ See the branch audit notes for the full Critical/High/Medium findings and the se
 Routine wearable CSV upload is not intended as the primary consumer experience. Dataset/CSV import remains available for internal research, testing, and historical backfill only.
 
 **Phase 3 — Personalized Longitudinal Intelligence**
+
+> **Guiding decision (2026-07-11):** the authoritative analytics layer is a
+> *deterministic, versioned* core — personalized rolling baselines, deviation
+> (z-score/EWMA), change-point detection, volatility/persistence, additive
+> attribution, and data-sufficiency gating. GRU and Isolation Forest remain
+> *complementary* layers (outlier flagging, forecasting) that sit on top of that
+> core, never the source of truth. This mirrors how wearable vendors actually
+> produce their scores (HRV-based baseline deviation, with ML reserved for
+> labeled tasks) and keeps the Instability Index reproducible and explainable.
+> Heavier/condition-specific models belong to the later diagnostics phase, with
+> labels, study design, and a regulatory pathway.
+
+
 - [ ] Minimum-data sufficiency rules
 - [ ] Versioned individualized rolling baselines
 - [ ] Missing-data and noise handling
