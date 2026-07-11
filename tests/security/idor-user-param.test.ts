@@ -2,47 +2,36 @@ import { describe, it, expect } from "vitest";
 import { requireUser } from "@/lib/auth";
 
 /**
- * Finding C1 (Critical) — IDOR via the `?user=` query parameter.
+ * Finding C1 (Critical) — IDOR via the `?user=` query parameter. FIXED.
  *
- * `lib/auth.ts#requireUser` derives the acting user purely from the `?user=`
- * query string and (for the email path) resolves it with the SERVICE-ROLE
- * client, which bypasses RLS. There is no verification that the caller's
- * session actually owns that user id. Any of the many routes that call
- * `requireUser` (/api/explain, /api/anomaly, /api/forecast, ...) can therefore
- * be driven against an arbitrary victim id.
+ * `requireUser` now derives identity from the Supabase session (auth cookie)
+ * and never from the request. `?user=` can no longer *select* the acting user;
+ * at most it must equal the caller's own id, otherwise the request is rejected.
  *
- * A well-formed UUID short-circuits `resolveUserId` before it touches the
- * database, so this test proves the authorization defect with zero network I/O.
+ * These tests run without a request scope, so no session exists — the secure
+ * contract is therefore to REJECT. Before the fix, the first case returned the
+ * attacker-supplied victim id; that regression is what these assertions lock
+ * down. (Positive-path, real-session isolation is covered by
+ * tests/security/rls-isolation.test.ts against a live Supabase.)
  */
 const VICTIM_ID = "11111111-1111-4111-8111-111111111111";
 
-describe("C1: cross-user IDOR through requireUser(?user=)", () => {
-  it("characterization — requireUser authorizes from ?user= alone (VULNERABLE)", async () => {
+describe("C1: requireUser is session-based (?user= cannot select the user)", () => {
+  it("rejects a ?user= request with no authenticated session", async () => {
     const req = new Request(`https://app.local/api/explain?user=${VICTIM_ID}`);
-
-    const user = await requireUser(req);
-
-    // No session was presented, yet the victim's id is returned as the acting
-    // user. This is the exploit primitive behind C1.
-    expect(user.id).toBe(VICTIM_ID);
+    await expect(requireUser(req)).rejects.toThrow();
   });
 
-  /**
-   * Regression target for the Point-2 fix.
-   *
-   * Marked `it.fails` on purpose: it encodes the SECURE expectation (an
-   * unauthenticated / mismatched caller must be rejected). Today `requireUser`
-   * resolves instead of rejecting, so the assertion below fails and `it.fails`
-   * reports GREEN. Once the session-based fix lands, `requireUser` will reject,
-   * this assertion will pass, and `it.fails` will flip the suite RED — the
-   * signal to delete the `.fails` marker and keep it as a permanent regression
-   * test.
-   */
-  it.fails(
-    "regression — requireUser must reject a ?user= with no matching session",
-    async () => {
-      const req = new Request(`https://app.local/api/explain?user=${VICTIM_ID}`);
-      await expect(requireUser(req)).rejects.toThrow();
-    },
-  );
+  it("rejects a request with no session and no params", async () => {
+    const req = new Request("https://app.local/api/explain");
+    await expect(requireUser(req)).rejects.toThrow();
+  });
+
+  it("never resolves to the attacker-supplied id", async () => {
+    const req = new Request(`https://app.local/api/explain?user=${VICTIM_ID}`);
+    await expect(requireUser(req)).rejects.toThrow();
+    // Belt and suspenders: prove it does not silently return the victim id.
+    const result = await requireUser(req).catch(() => null);
+    expect(result).toBeNull();
+  });
 });
