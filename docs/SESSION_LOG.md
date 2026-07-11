@@ -10,7 +10,10 @@ and open items — not narrative.
 ## Current status & next up
 
 - **Active branch:** `feature/productEnhancement` (pushed to `origin`, tracking).
-  `main` is untouched. No PR opened yet.
+  `main` is untouched.
+- **Workflow rule (do not violate):** all work stays on this branch. **No PR, no
+  merge to `main`** until the entire build is finished and manually tested; only
+  then do we merge. Do not propose a PR/merge before the user says it's done.
 - **Done so far:** end-to-end registration flow; Phase-0 audit + adversarial
   review; Vitest harness; authorization fixes **C1** (read + write routes) and
   **H3** (copilot) with tests; copilot data layer restored via cookie
@@ -35,7 +38,8 @@ and open items — not narrative.
   a clean live web-OAuth path: **Oura Ring** (best data + API) or **Fitbit Charge
   6** (cheapest legitimate web OAuth). Foundation build is provider-agnostic and
   not blocked; only the concrete adapter needs this.
-- **Open PR?** Not yet.
+- **PR/merge:** deferred by policy until the full build is tested (see workflow
+  rule above).
 
 ### Action items for the user (when relevant)
 - Set **`CRON_SECRET`** in env/Vercel and have the cron job send
