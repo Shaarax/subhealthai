@@ -89,3 +89,4 @@ export async function GET(req: Request) {
       "This is a non-diagnostic AI indicator intended for preventive context and clinician discussion only."
   });
 }
+export const dynamic = "force-dynamic";

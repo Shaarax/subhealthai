@@ -67,3 +67,5 @@ export async function GET(req: NextRequest) {
   return NextResponse.json({ snapshot: data?.[0] ?? null });
 }
 
+
+export const dynamic = "force-dynamic";

@@ -191,3 +191,5 @@ function computeZ(val: number | null | undefined, mu: number | null, s: number |
 }
 
 
+
+export const dynamic = "force-dynamic";

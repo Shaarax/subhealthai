@@ -22,6 +22,16 @@ and open items — not narrative.
 - **Tests:** `npm test` → 17 passed, 6 skipped (skipped = live-RLS suite needing
   `TEST_*` env). `tsc --noEmit` clean.
 
+### Build health
+- `npm run build` passes (exit 0). Vercel Preview builds were failing on
+  `/api/contextual_risk` + `/api/multimodal_risk`: GET handlers that call
+  `requireUser()` and weren't otherwise dynamic, so Next tried to static-prerender
+  them → no session at build → throw. Root cause tied to the C1 rewrite (its
+  try/catch around `getCurrentAppUserId()`/`cookies()` swallowed Next's
+  dynamic-usage bailout). Fixed by adding `export const dynamic = "force-dynamic"`
+  to all session-dependent API routes (37 total). Re-verify with `npm run build`
+  after touching auth/session routes.
+
 ### Next up (pick one — both unblocked)
 1. **Provider-agnostic ingestion foundation** — canonical ingest API (+ per-user
    auth) into `events_raw` (dedupe index already exists), AES-256-GCM token

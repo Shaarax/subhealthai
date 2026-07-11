@@ -17,3 +17,5 @@ export async function POST(req: Request) {
   return Response.json({ ok: true });
 }
 
+
+export const dynamic = "force-dynamic";

@@ -38,3 +38,5 @@ export async function GET(req: Request) {
     created_at: data?.created_at ?? null
   });
 }
+
+export const dynamic = "force-dynamic";
