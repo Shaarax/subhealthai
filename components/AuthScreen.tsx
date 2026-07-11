@@ -8,10 +8,11 @@ import { AnimatedGridBackground } from '@/components/AnimatedGridBackground';
 
 type AuthScreenProps = {
   onLogin: (email: string, password?: string) => Promise<{ success: boolean; error?: string }>;
+  onSignup?: (email: string, password: string) => Promise<{ success: boolean; error?: string; needsConfirmation?: boolean }>;
   onNavigateBack?: () => void;
 };
 
-export function AuthScreen({ onLogin, onNavigateBack }: AuthScreenProps) {
+export function AuthScreen({ onLogin, onSignup, onNavigateBack }: AuthScreenProps) {
   const router = useRouter();
   const [mode, setMode] = useState<'login' | 'signup'>('login');
   const [userId, setUserId] = useState('');
@@ -19,14 +20,48 @@ export function AuthScreen({ onLogin, onNavigateBack }: AuthScreenProps) {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [signupSuccess, setSignupSuccess] = useState<string | null>(null);
+
+  const handleSignupSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!onSignup) return;
+    setError(null);
+    setSignupSuccess(null);
+
+    const emailTrimmed = userEmail?.trim() || '';
+    if (!emailTrimmed || !emailTrimmed.includes('@')) {
+      setError('Please enter a valid email address');
+      return;
+    }
+    if (!password?.trim() || password.length < 6) {
+      setError('Password must be at least 6 characters');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const result = await onSignup(emailTrimmed, password);
+      if (!result.success) {
+        setError(result.error || 'Registration failed');
+        setLoading(false);
+        return;
+      }
+      if (result.needsConfirmation) {
+        // Email confirmation is enabled on the project; no session yet.
+        setSignupSuccess(`Check your inbox — we sent a confirmation link to ${emailTrimmed}. Confirm your email, then log in.`);
+        setLoading(false);
+        return;
+      }
+      // Otherwise onSignup established a session and will redirect to /dashboard.
+    } catch (err) {
+      console.error('Signup error:', err);
+      setError('An unexpected error occurred. Please try again.');
+      setLoading(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Create Protocol is not available in prototype
-    if (mode === 'signup') {
-      return; // Do nothing - form is disabled
-    }
 
     setError(null);
     setLoading(true);
@@ -96,6 +131,7 @@ export function AuthScreen({ onLogin, onNavigateBack }: AuthScreenProps) {
               onClick={() => {
                 setMode('login');
                 setError(null); // Clear any errors when switching to Identity Login
+                setSignupSuccess(null);
               }}
               className={`flex-1 py-2 text-[10px] font-bold uppercase tracking-wider rounded transition-all ${mode === 'login' ? 'bg-slate-800 text-white shadow-sm border border-white/10' : 'text-slate-500 hover:text-slate-300'}`}
             >
@@ -105,6 +141,7 @@ export function AuthScreen({ onLogin, onNavigateBack }: AuthScreenProps) {
               onClick={() => {
                 setMode('signup');
                 setError(null); // Clear any errors when switching to Create Protocol
+                setSignupSuccess(null);
               }}
               className={`flex-1 py-2 text-[10px] font-bold uppercase tracking-wider rounded transition-all ${mode === 'signup' ? 'bg-slate-800 text-white shadow-sm border border-white/10' : 'text-slate-500 hover:text-slate-300'}`}
             >
@@ -195,29 +232,89 @@ export function AuthScreen({ onLogin, onNavigateBack }: AuthScreenProps) {
                 )}
               </button>
             </form>
-          ) : (
-            /* Create Protocol - Coming Soon */
-            <div className="space-y-6">
-              <div className="text-center space-y-3">
-                <h3 className="text-lg font-['Unbounded'] font-bold text-white">Create Protocol</h3>
-                <p className="text-sm text-slate-400 font-mono leading-relaxed">
-                  Coming soon – this will allow researchers to onboard new Bio-Twin protocols.
-                </p>
+          ) : signupSuccess ? (
+            /* Create Protocol - confirmation pending */
+            <div className="space-y-6 text-center">
+              <div className="inline-flex items-center justify-center w-12 h-12 mx-auto bg-emerald-500/10 border border-emerald-500/30 rounded-xl">
+                <Mail className="w-5 h-5 text-emerald-400" />
               </div>
-              
-              <div className="pt-4">
-                <button 
-                  type="button"
-                  disabled
-                  className="w-full py-3 bg-slate-800/50 border border-slate-700 text-slate-500 font-['Unbounded'] font-bold text-xs uppercase tracking-wider rounded-lg cursor-not-allowed opacity-50 flex items-center justify-center gap-2"
-                >
-                  REQUEST ACCESS
-                </button>
-                <p className="text-center mt-3 text-[10px] font-mono text-slate-500 italic">
-                  Protocol creation is currently closed in this prototype. Access is by invitation only.
-                </p>
-              </div>
+              <p className="text-sm text-slate-300 font-mono leading-relaxed">{signupSuccess}</p>
+              <button
+                type="button"
+                onClick={() => {
+                  setMode('login');
+                  setSignupSuccess(null);
+                  setError(null);
+                }}
+                className="w-full py-3 bg-white hover:bg-cyan-50 text-black font-['Unbounded'] font-bold text-xs uppercase tracking-wider rounded-lg transition-all"
+              >
+                Back to Login
+              </button>
             </div>
+          ) : (
+            /* Create Protocol - registration form */
+            <form onSubmit={handleSignupSubmit} className="space-y-4">
+              <div className="space-y-1.5">
+                <label className="text-[9px] font-mono text-slate-400 uppercase tracking-widest ml-1">Email</label>
+                <div className="relative group">
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-600 group-focus-within:text-cyan-400 transition-colors" />
+                  <input
+                    type="email"
+                    value={userEmail}
+                    disabled={loading}
+                    required
+                    onChange={(e) => {
+                      setError(null);
+                      setUserEmail(e.target.value);
+                      setUserId('');
+                    }}
+                    className="w-full bg-black/40 border border-slate-800 rounded-lg py-3 pl-10 pr-4 text-sm text-white focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all placeholder:text-slate-700 font-mono disabled:opacity-50 disabled:cursor-not-allowed"
+                    placeholder="researcher@subhealth.ai"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-[9px] font-mono text-slate-400 uppercase tracking-widest ml-1">Passphrase (min 6 chars)</label>
+                <div className="relative group">
+                  <Key className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-600 group-focus-within:text-cyan-400 transition-colors" />
+                  <input
+                    type="password"
+                    value={password}
+                    disabled={loading}
+                    required
+                    minLength={6}
+                    onChange={(e) => {
+                      setError(null);
+                      setPassword(e.target.value);
+                    }}
+                    className="w-full bg-black/40 border border-slate-800 rounded-lg py-3 pl-10 pr-4 text-sm text-white focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all placeholder:text-slate-700 font-mono disabled:opacity-50 disabled:cursor-not-allowed"
+                    placeholder="••••••••••••"
+                  />
+                </div>
+              </div>
+
+              {error && (
+                <div className="mt-2 p-3 bg-rose-500/10 border border-rose-500/30 rounded-lg">
+                  <p className="text-[10px] font-mono text-rose-400 text-center">{error}</p>
+                </div>
+              )}
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full py-3 bg-white hover:bg-cyan-50 disabled:opacity-50 disabled:cursor-not-allowed text-black font-['Unbounded'] font-bold text-xs uppercase tracking-wider rounded-lg transition-all mt-4 shadow-[0_0_20px_rgba(255,255,255,0.1)] flex items-center justify-center gap-2"
+              >
+                {loading ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin"></div>
+                    <span>Creating…</span>
+                  </>
+                ) : (
+                  <span>Create Protocol</span>
+                )}
+              </button>
+            </form>
           )}
         </div>
 

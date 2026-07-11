@@ -225,7 +225,125 @@ Demo access: https://subhealthai.vercel.app
 
 ---
 
-## 📈 Roadmap
+## Product Direction — 2026
+
+SubHealthAI is evolving from a controlled research demonstration into a secure, user-facing preventive-health intelligence platform.
+
+The platform’s central objective is to unify longitudinal data from wearables, optional laboratory results, health records, lifestyle context, and user-recorded events, and convert those inputs into explainable, baseline-relative, non-diagnostic physiological pattern summaries.
+
+The intended product experience is:
+
+1. Connect a supported wearable or health-data source.
+2. Synchronize historical and ongoing data automatically.
+3. Establish an individualized rolling baseline.
+4. Identify changes relative to the user’s own longitudinal patterns.
+5. Explain the signals contributing to the observed change.
+6. Optionally add confirmed laboratory results and contextual events.
+7. Generate grounded AI explanations and versioned longitudinal reports.
+
+SubHealthAI is not a medical device and does not diagnose, treat, or predict disease.
+
+### Core Product Principles
+
+- Device-independent health-data integration
+- Automatic wearable synchronization
+- Individualized longitudinal baselines
+- Explainable and auditable analytics
+- Explicit source provenance
+- Transparent data-quality limitations
+- User-controlled permissions
+- Non-diagnostic product boundaries
+- Deterministic analytics with grounded AI explanations
+- Separation between research demonstrations and validated product capabilities
+
+### Implementation Status (audited 2026-07-11, branch `feature/productEnhancement`)
+
+This roadmap tracks the *target* platform. Per project policy, items are only checked when they work in the repository. A full repository audit was performed on 2026-07-11; current honest status:
+
+- **Real-user registration** — in progress on this branch. An `auth.users → public.users` provisioning trigger and a working sign-up form were added so a brand-new account is provisioned end-to-end. Not yet covered by automated tests.
+- **Wearable OAuth / sync pipeline** — *not implemented.* `lib/oauth.ts`, `lib/deviceAccounts.ts`, and `lib/queue.ts` are stubs (fake tokens, no-op persistence, console-log queue). The `device_accounts` table exists but nothing writes to it.
+- **Per-user API authorization** — *known gap.* Two auth patterns coexist: a secure session-based path (`lib/getCurrentAppUserId.ts`) and an insecure `?user=<uuid>` service-role path (`lib/auth.ts requireUser`) used by many `/api/*` routes. The latter allows cross-user data access and must be closed before real users onboard.
+- **Baseline / instability / SHAP / reports** — implemented as research/demonstration components; reproducibility, versioning, and RLS enforcement are not yet verified by tests.
+- **Automated tests** — *none present in the repository.*
+
+See the branch audit notes for the full Critical/High/Medium findings and the sequenced remediation plan. No roadmap phase below should be treated as delivered until its items are checked here with supporting evidence.
+
+### Roadmap — Platform 2026
+
+**Phase 1 — Secure Real-User Foundation**
+- [ ] Verify registration, authentication, and profile provisioning
+- [ ] Verify email confirmation and password reset
+- [ ] Implement consent and non-diagnostic acknowledgement
+- [ ] Validate Supabase Row-Level Security
+- [ ] Add automated cross-user isolation tests
+- [ ] Separate controlled demonstration execution from real-user execution
+
+**Phase 2 — Direct Wearable Connectivity**
+- [ ] Implement provider-independent wearable integration interface
+- [ ] Add secure OAuth authorization and callback handling (state validation, PKCE)
+- [ ] Add encrypted provider-token handling
+- [ ] Implement historical + incremental synchronization
+- [ ] Add provider-record deduplication and canonical normalization
+- [ ] Add sync status, retry behavior, and revocation
+- [ ] Implement first production-quality wearable provider
+
+Routine wearable CSV upload is not intended as the primary consumer experience. Dataset/CSV import remains available for internal research, testing, and historical backfill only.
+
+**Phase 3 — Personalized Longitudinal Intelligence**
+- [ ] Minimum-data sufficiency rules
+- [ ] Versioned individualized rolling baselines
+- [ ] Missing-data and noise handling
+- [ ] Reproducible Instability Index calculations
+- [ ] Longitudinal trend and volatility analysis
+- [ ] Versioned feature attribution
+- [ ] Source provenance and data-quality limitations
+
+**Phase 4 — Laboratory and Health-Record Context**
+- [ ] Optional laboratory PDF/image upload with candidate extraction
+- [ ] Require user verification before values are confirmed
+- [ ] Manual laboratory entry; preserve source file + extraction provenance
+- [ ] Unit and reference-range normalization
+- [ ] Explore FHIR / SMART on FHIR where supported
+
+Direct connectivity to a specific laboratory or hospital system will not be claimed until a supported technical or partnership pathway exists.
+
+**Phase 5 — Unified Personal Health Timeline**
+- [ ] Combine wearable metrics, labs, workouts, sleep, weight
+- [ ] User-recorded symptoms, medication/supplement changes, contextual events
+- [ ] Pre/post period comparisons
+- [ ] Distinguish device-derived, manually entered, extracted, and calculated data
+
+**Phase 6 — Grounded AI Copilot**
+- [ ] Read-only analytics tools; explanations only from verified structured results
+- [ ] Explain Instability Index changes; compare periods; surface missing-data limits
+- [ ] Non-diagnostic 30/90-day summaries
+- [ ] Version prompts, policies, models, evidence references
+- [ ] Evaluate unsupported-claim and diagnostic-language violation rates
+
+The AI layer explains authoritative analytics. It does not independently calculate clinical conclusions, diagnose disease, or recommend treatment.
+
+**Phase 7 — Evaluation and Research**
+- [ ] Synchronization reliability; baseline reproducibility
+- [ ] Robustness to missing/noisy data; attribution stability; false-alert behavior
+- [ ] AI groundedness and safety evaluation
+- [ ] Structured usability testing
+- [ ] System-architecture and empirical-evaluation publications
+
+Clinical performance metrics (sensitivity, specificity, AUROC, etc.) will not be claimed without appropriate labels, study design, expert oversight, and validation.
+
+**Phase 8 — Research, Pilot, and Commercial Development**
+- [ ] Early research users and structured feedback
+- [ ] Qualified research/clinical advisors
+- [ ] Genuine pilot Letters of Interest
+- [ ] NSF/NIH SBIR/STTR materials where eligible
+- [ ] Commercialization and market-validation plan
+- [ ] Selective investor and strategic-partner outreach
+
+**Future Regulated Research (not current product claims):** clinically validated digital biomarkers, disease-specific models, camera-based physiological measurement, clinical decision support, prospective studies, SaMD/FDA pathways, hospital deployment, and direct diagnostic-laboratory partnerships. Each would require separate validation, governance, intended-use analysis, quality-management processes, clinical collaboration, and regulatory review.
+
+---
+
+## 📈 Roadmap (Original Research Prototype)
 
 **✅ MVP (Completed)**  
 - [x] Project scaffold: Next.js + Supabase + TailwindCSS  

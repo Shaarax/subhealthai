@@ -420,6 +420,45 @@ export default function SubHealthAIDashboard({
     }
   };
 
+  const handleSignup = async (email: string, password: string) => {
+    const emailTrimmed = email.trim().toLowerCase();
+    if (!emailTrimmed || !emailTrimmed.includes("@")) {
+      return { success: false, error: "Please enter a valid email address." };
+    }
+    if (!password || password.length < 6) {
+      return { success: false, error: "Password must be at least 6 characters." };
+    }
+
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email: emailTrimmed,
+        password,
+        options: {
+          data: { display_name: emailTrimmed.split("@")[0] },
+        },
+      });
+
+      if (error) {
+        console.error("Supabase signup error:", error);
+        return { success: false, error: error.message || "Registration failed." };
+      }
+
+      // Two outcomes depending on the project's email-confirmation setting:
+      // 1) Confirmation OFF -> a session is returned immediately; log straight in.
+      // 2) Confirmation ON  -> user exists but no session; ask them to verify.
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        window.location.href = "/dashboard";
+        return { success: true };
+      }
+
+      return { success: true, needsConfirmation: true };
+    } catch (err) {
+      console.error("Unexpected signup error:", err);
+      return { success: false, error: "An unexpected error occurred during registration." };
+    }
+  };
+
   const handleLogout = async () => {
     // Redirect immediately to avoid showing dashboard during logout
     // Sign out in the background, but don't wait for it
@@ -441,7 +480,7 @@ export default function SubHealthAIDashboard({
   }
 
   if (view === "auth") {
-    return <AuthScreen onLogin={handleLogin} onNavigateBack={() => setView('landing')} />;
+    return <AuthScreen onLogin={handleLogin} onSignup={handleSignup} onNavigateBack={() => setView('landing')} />;
   }
 
   if (view === 'dashboard' && !isValidEffectiveUserId && !loading) {
