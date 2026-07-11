@@ -1,9 +1,17 @@
+import { currentCookieHeader } from "@/lib/server/forwardCookies";
+
 const ORIGIN = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
 async function fetchJSON<T>(path: string, params: Record<string, string>): Promise<T> {
   const url = new URL(path, ORIGIN);
   Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
-  const res = await fetch(url.toString(), { cache: "no-store" });
+  // Forward the caller's session cookies so the session-gated read routes
+  // authorize this server-to-server request as the real user.
+  const cookie = currentCookieHeader();
+  const res = await fetch(url.toString(), {
+    cache: "no-store",
+    headers: cookie ? { cookie } : undefined,
+  });
   if (!res.ok) throw new Error(`${path} failed ${res.status}`);
   return (await res.json()) as T;
 }

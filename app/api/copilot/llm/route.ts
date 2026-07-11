@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { SYSTEM_PROMPT } from "@/lib/copilot/systemPrompt";
 import { toolSpecs } from "@/lib/copilot/tools";
 import { resolveActingUser } from "@/lib/authUser";
+import { currentCookieHeader } from "@/lib/server/forwardCookies";
 
 const BASE = process.env.LLM_BASE_URL!;
 const KEY = process.env.LLM_API_KEY!;
@@ -11,11 +12,17 @@ const ORIGIN = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
 async function callTool(name: string, args: Record<string, any>) {
   try {
+    // Forward the caller's session cookies so the session-gated read routes
+    // authorize these server-to-server calls as the real user.
+    const cookie = currentCookieHeader();
+    const init: RequestInit | undefined = cookie ? { headers: { cookie } } : undefined;
+
     if (name === "get_risk") {
       const res = await fetch(
         `${ORIGIN}/api/risk?user=${encodeURIComponent(args.user)}&version=${encodeURIComponent(
           args.version ?? "phase3-v1-wes"
-        )}`
+        )}`,
+        init
       );
       return res.json();
     }
@@ -23,23 +30,26 @@ async function callTool(name: string, args: Record<string, any>) {
       const res = await fetch(
         `${ORIGIN}/api/explain/summary?user=${encodeURIComponent(args.user)}&version=${encodeURIComponent(
           args.version ?? "phase3-v1-wes"
-        )}`
+        )}`,
+        init
       );
       return res.json();
     }
     if (name === "get_anomaly") {
-      const res = await fetch(`${ORIGIN}/api/anomaly?user=${encodeURIComponent(args.user)}`);
+      const res = await fetch(`${ORIGIN}/api/anomaly?user=${encodeURIComponent(args.user)}`, init);
       return res.json();
     }
     if (name === "get_reliability") {
       const res = await fetch(
-        `${ORIGIN}/api/reliability?version=${encodeURIComponent(args.version ?? "phase3-v1-wes")}`
+        `${ORIGIN}/api/reliability?version=${encodeURIComponent(args.version ?? "phase3-v1-wes")}`,
+        init
       );
       return res.json();
     }
     if (name === "get_volatility") {
       const res = await fetch(
-        `${ORIGIN}/api/volatility?version=${encodeURIComponent(args.version ?? "phase3-v1-wes")}`
+        `${ORIGIN}/api/volatility?version=${encodeURIComponent(args.version ?? "phase3-v1-wes")}`,
+        init
       );
       return res.json();
     }
@@ -63,12 +73,10 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "missing user" }, { status: 400 });
     }
 
-    // H3: derive the acting user from the session (demo ids pass through).
-    // NOTE: this route's tool executor still self-fetches session-gated routes
-    // (/api/anomaly, /api/explain/summary) without forwarding the caller's
-    // cookies, so those tools will return errors for real users. This route is
-    // not wired to the client; a proper fix should call the data functions
-    // directly (see app/api/report/route.ts). Tracked as H3 follow-up.
+    // H3: derive the acting user from the session (demo ids pass through). The
+    // tool executor (callTool) forwards the caller's cookies on its
+    // server-to-server fetches, so the session-gated read routes authorize it
+    // as the real user. This route is not currently wired to the client.
     let actingUser: string;
     try {
       ({ id: actingUser } = await resolveActingUser(user));
