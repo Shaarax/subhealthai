@@ -262,7 +262,7 @@ This roadmap tracks the *target* platform. Per project policy, items are only ch
 
 - **Real-user registration** — in progress on this branch. An `auth.users → public.users` provisioning trigger and a working sign-up form were added so a brand-new account is provisioned end-to-end. Not yet covered by automated tests.
 - **Wearable OAuth / sync pipeline** — *not implemented.* `lib/oauth.ts`, `lib/deviceAccounts.ts`, and `lib/queue.ts` are stubs (fake tokens, no-op persistence, console-log queue). The `device_accounts` table exists but nothing writes to it.
-- **Per-user API authorization** — *known gap.* Two auth patterns coexist: a secure session-based path (`lib/getCurrentAppUserId.ts`) and an insecure `?user=<uuid>` service-role path (`lib/auth.ts requireUser`) used by many `/api/*` routes. The latter allows cross-user data access and must be closed before real users onboard.
+- **Per-user API authorization** — *largely closed on this branch.* Identity is now derived from the Supabase session for both the write/ingest routes (`lib/auth.ts requireUser`) and the ~19 read routes (`lib/authUser.ts resolveOwnUserId`); a `?user=` value is accepted only when it equals the caller's own id, and the public demo profiles still resolve through each route's pre-resolution demo branch. Covered by `tests/security/*`. **Remaining:** the copilot self-fetch tools (`app/api/copilot/llm/route.ts`) still pass a request-body `user` to now-gated routes (finding H3) — a separate slice.
 - **Baseline / instability / SHAP / reports** — implemented as research/demonstration components; reproducibility, versioning, and RLS enforcement are not yet verified by tests.
 - **Automated tests** — *none present in the repository.*
 

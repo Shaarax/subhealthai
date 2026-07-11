@@ -4,7 +4,7 @@ import { createClient } from "@supabase/supabase-js";
 import { type DashboardViewData } from "@/lib/dashboardViewData";
 import { DEMO_PROFILES } from "@/lib/dashboardViewData";
 import { buildRealUserDashboard } from "@/lib/dashboardRealUser";
-import { resolveUserId } from "@/lib/resolveUser";
+import { resolveOwnUserId } from "@/lib/authUser";
 
 const ENGINE_VERSION = "phase3-v1-wes";
 
@@ -249,7 +249,7 @@ export async function GET(req: NextRequest) {
   // 🔑 Resolve email → UUID if needed
   let userId: string;
   try {
-    userId = await resolveUserId(userParam);
+    userId = await resolveOwnUserId(userParam);
   } catch (err) {
     const message = err instanceof Error ? err.message : "Unable to resolve user.";
     return NextResponse.json({ error: message }, { status: 400 });

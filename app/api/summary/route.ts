@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { resolveUserId } from "@/lib/resolveUser";
+import { resolveOwnUserId } from "@/lib/authUser";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 
 export async function GET(req: Request) {
@@ -8,7 +8,7 @@ export async function GET(req: Request) {
 
   let user: string;
   try {
-    user = await resolveUserId(searchParams.get("user"));
+    user = await resolveOwnUserId(searchParams.get("user"));
   } catch (err) {
     const message = err instanceof Error ? err.message : "Unable to resolve user.";
     return NextResponse.json({ error: message }, { status: 400 });

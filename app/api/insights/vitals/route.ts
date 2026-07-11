@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { createServerClient } from "@supabase/ssr";
-import { resolveUserId } from "@/lib/resolveUser";
+import { resolveOwnUserId } from "@/lib/authUser";
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
@@ -30,7 +30,7 @@ export async function GET(req: NextRequest) {
   // Resolve user_id (supports both email and UUID)
   let userId: string;
   try {
-    userId = await resolveUserId(userParam);
+    userId = await resolveOwnUserId(userParam);
   } catch (err) {
     const message = err instanceof Error ? err.message : "Unable to resolve user.";
     return NextResponse.json({ error: message }, { status: 400 });

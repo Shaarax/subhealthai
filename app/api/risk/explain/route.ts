@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
-import { resolveUserId } from "@/lib/resolveUser";
+import { resolveOwnUserId } from "@/lib/authUser";
 
 function toPct(x: number) { return Math.round(Math.min(1, Math.max(0, x)) * 100); }
 
@@ -41,7 +41,7 @@ export async function GET(req: Request) {
 
   let user: string;
   try {
-    user = await resolveUserId(searchParams.get("user"));
+    user = await resolveOwnUserId(searchParams.get("user"));
   } catch (err) {
     const message = err instanceof Error ? err.message : "Unable to resolve user.";
     return NextResponse.json({ error: message }, { status: 400 });

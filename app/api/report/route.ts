@@ -7,38 +7,34 @@ import { DEMO_PROFILES } from "@/lib/dashboardViewData";
 import type { DashboardViewData } from "@/lib/dashboardViewData";
 import { getCurrentAppUserId } from "@/lib/getCurrentAppUserId";
 import { loadDashboardViewData } from "@/lib/dashboardLoader";
+import { buildRealUserDashboard } from "@/lib/dashboardRealUser";
 
 async function loadReportData(userId: string, version: string): Promise<DashboardViewData> {
   const pdfData = await loadDashboardViewData(userId);
 
   try {
-    const base =
-      process.env.NEXT_PUBLIC_BASE_URL?.replace(/\/$/, "") ||
-      (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
-    const res = await fetch(
-      `${base}/api/dashboard?user=${encodeURIComponent(userId)}&version=${encodeURIComponent(version)}`,
-      { cache: "no-store" },
-    );
-    if (res.ok) {
-      const dash = (await res.json()) as DashboardViewData;
-      if (dash && typeof dash.instabilityScore === "number") {
-        return {
-          ...pdfData,
-          ...dash,
-          instabilityScore: dash.instabilityScore,
-          status: dash.status ?? pdfData.status,
-          narrative: dash.narrative ?? pdfData.narrative,
-          drivers:
-            Array.isArray(dash.drivers) && dash.drivers.length > 0
-              ? dash.drivers
-              : pdfData.drivers,
-          vitals: dash.vitals ?? pdfData.vitals,
-          drift: dash.drift ?? pdfData.drift,
-          labs: dash.labs?.length ? dash.labs : pdfData.labs,
-          forecast: dash.forecast?.length ? dash.forecast : pdfData.forecast,
-          volatilityIndex: dash.volatilityIndex ?? pdfData.volatilityIndex,
-        };
-      }
+    // Call the dashboard builder directly rather than doing a server-to-server
+    // fetch of /api/dashboard. The self-fetch carried no auth cookie, so once
+    // that route became session-gated (C1 fix) it would fail and silently drop
+    // the enrichment. `userId` is already the authenticated caller's id here.
+    const dash = await buildRealUserDashboard(userId);
+    if (dash && typeof dash.instabilityScore === "number") {
+      return {
+        ...pdfData,
+        ...dash,
+        instabilityScore: dash.instabilityScore,
+        status: dash.status ?? pdfData.status,
+        narrative: dash.narrative ?? pdfData.narrative,
+        drivers:
+          Array.isArray(dash.drivers) && dash.drivers.length > 0
+            ? dash.drivers
+            : pdfData.drivers,
+        vitals: dash.vitals ?? pdfData.vitals,
+        drift: dash.drift ?? pdfData.drift,
+        labs: dash.labs?.length ? dash.labs : pdfData.labs,
+        forecast: dash.forecast?.length ? dash.forecast : pdfData.forecast,
+        volatilityIndex: dash.volatilityIndex ?? pdfData.volatilityIndex,
+      };
     }
   } catch (err) {
     console.warn("[Report API] Dashboard merge skipped:", err);

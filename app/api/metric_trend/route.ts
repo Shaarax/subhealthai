@@ -1,13 +1,13 @@
 import { NextResponse } from "next/server";
 
-import { resolveUserId } from "@/lib/resolveUser";
+import { resolveOwnUserId } from "@/lib/authUser";
 import { shapToColumn } from "@/lib/shapMap";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
 
-  const user = await resolveUserId(searchParams.get("user"));
+  const user = await resolveOwnUserId(searchParams.get("user"));
   const metricKey = searchParams.get("metric");
 
   if (!metricKey) {

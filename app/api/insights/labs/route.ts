@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { resolveUserId } from "@/lib/resolveUser";
+import { resolveOwnUserId } from "@/lib/authUser";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 
 export async function GET(req: NextRequest) {
@@ -29,7 +29,7 @@ export async function GET(req: NextRequest) {
   // Resolve user_id (supports both email and UUID)
   let userId: string;
   try {
-    userId = await resolveUserId(userParam);
+    userId = await resolveOwnUserId(userParam);
     console.log("[Labs API] Resolved userId:", userId);
   } catch (err) {
     const message = err instanceof Error ? err.message : "Unable to resolve user.";

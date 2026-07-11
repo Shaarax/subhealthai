@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
-import { resolveUserId } from "@/lib/resolveUser";
+import { resolveOwnUserId } from "@/lib/authUser";
 
 type MetricKey = "rhr" | "hrv" | "sleep" | "steps";
 
@@ -23,7 +23,7 @@ export async function GET(req: Request) {
     if (!userParam) {
       return NextResponse.json({ error: "missing ?user" }, { status: 400 });
     }
-    const user = await resolveUserId(userParam);
+    const user = await resolveOwnUserId(userParam);
 
     const dayParam = searchParams.get("day") ?? undefined;
 

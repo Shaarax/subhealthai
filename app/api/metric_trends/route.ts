@@ -1,13 +1,13 @@
 import { NextResponse } from "next/server";
 
-import { resolveUserId } from "@/lib/resolveUser";
+import { resolveOwnUserId } from "@/lib/authUser";
 import { SHAP_TO_DB } from "@/lib/shapMap";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
 
-  const user = await resolveUserId(searchParams.get("user"));
+  const user = await resolveOwnUserId(searchParams.get("user"));
   const days = Math.max(3, Math.min(90, Number(searchParams.get("days") || 7)));
   const features =
     searchParams
